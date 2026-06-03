@@ -1,0 +1,23 @@
+{
+  "name": "egda-website-mockup",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "vite build",
+    "preview": "vite preview --host 127.0.0.1"
+  },
+  "dependencies": {
+    "@react-three/drei": "^10.7.7",
+    "@react-three/fiber": "^9.4.0",
+    "@react-three/rapier": "^2.2.0",
+    "@vitejs/plugin-react": "^5.1.1",
+    "meshline": "^3.3.1",
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1",
+    "three": "^0.181.2",
+    "vite": "^7.2.7"
+  },
+  "devDependencies": {}
+}

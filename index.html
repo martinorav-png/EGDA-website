@@ -31,9 +31,12 @@
 
       html {
         scroll-behavior: smooth;
+        width: 100%;
+        overflow-x: hidden;
       }
 
       body {
+        width: 100%;
         min-height: 100vh;
         background: var(--bg);
         color: var(--fg);
@@ -108,7 +111,7 @@
       .page {
         position: relative;
         z-index: 1;
-        width: min(1440px, 100%);
+        width: min(1440px, 100vw);
         min-height: 100vh;
         margin: 0 auto;
         border-left: var(--line);
@@ -207,6 +210,7 @@
         letter-spacing: -0.07em;
         line-height: 0.86;
         text-transform: uppercase;
+        overflow-wrap: break-word;
       }
 
       .hero {
@@ -502,6 +506,12 @@
       }
 
       @media (max-width: 1100px) {
+        .page {
+          width: 100vw;
+          max-width: none;
+          margin: 0;
+        }
+
         .topbar,
         .hero,
         .section-head,
@@ -526,6 +536,11 @@
           flex-wrap: wrap;
         }
 
+        .header-link {
+          border-left: 0;
+          border-top: var(--line);
+        }
+
         .focus-grid {
           grid-template-columns: repeat(2, minmax(0, 1fr));
         }
@@ -545,20 +560,84 @@
           border-right: 0;
         }
 
+        .topbar {
+          position: relative;
+        }
+
+        .brand,
+        .nav,
+        .header-link {
+          width: 100%;
+        }
+
+        .brand {
+          padding: 14px 16px;
+        }
+
+        .brand span {
+          max-width: none;
+        }
+
         .nav a,
         .header-link,
         .button {
           width: 100%;
           border-left: 0;
           border-top: var(--line);
+          border-right: 0;
+          min-height: 52px;
+          padding: 0 16px;
         }
 
         .button-row {
           width: 100%;
+          border-right: 0;
         }
 
         .hero h1 {
-          font-size: clamp(4rem, 16vw, 6rem);
+          font-size: clamp(3rem, 14.5vw, 5.25rem);
+        }
+
+        .hero {
+          min-height: auto;
+        }
+
+        .hero-main {
+          min-height: 76vh;
+          padding: 24px 16px;
+        }
+
+        .hero-copy p {
+          font-size: clamp(1.08rem, 6vw, 1.45rem);
+        }
+
+        .panel-label,
+        .objective,
+        .section-title,
+        .section-summary,
+        .focus-card,
+        .join-panel,
+        .news-card,
+        .contact-card,
+        .footer-note {
+          padding-left: 16px;
+          padding-right: 16px;
+        }
+
+        .section-title h2,
+        .join-panel h2,
+        .news-card h3 {
+          font-size: clamp(2.65rem, 13vw, 4.5rem);
+        }
+
+        .objective h2,
+        .focus-card h3 {
+          font-size: clamp(2.05rem, 10.5vw, 3.35rem);
+        }
+
+        .join-panel {
+          min-height: auto;
+          gap: 28px;
         }
 
         .focus-grid {
@@ -582,6 +661,16 @@
         .benefit-label {
           border-right: 0;
           border-bottom: var(--line);
+          padding: 14px 16px;
+        }
+
+        .benefit-text {
+          padding: 16px;
+          font-size: clamp(1rem, 5.4vw, 1.45rem);
+        }
+
+        .contact-card a {
+          font-size: clamp(1.2rem, 8vw, 1.75rem);
         }
 
         .footer-note {

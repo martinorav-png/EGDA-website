@@ -7,7 +7,7 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        main: 'variant-copy.html'
+        main: 'index.html'
       }
     }
   }

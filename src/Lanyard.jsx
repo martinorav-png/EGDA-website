@@ -35,6 +35,7 @@ export default function Lanyard({
         camera={{ position: position, fov: fov }}
         dpr={[1, isMobile ? 1.5 : 2]}
         gl={{ alpha: transparent }}
+        style={{ width: '100%', height: '100%' }}
         onCreated={({ gl }) => gl.setClearColor(new THREE.Color(0x000000), transparent ? 0 : 1)}
       >
         <ambientLight intensity={Math.PI} />
@@ -161,7 +162,7 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false, applyUrl }) {
 
   return (
     <>
-      <group position={[0, 4, 0]}>
+      <group position={isMobile ? [-0.25, 3.85, 0] : [0, 4.45, 0]}>
         <RigidBody ref={fixed} {...segmentProps} type="fixed" />
         <RigidBody position={[0.5, 0, 0]} ref={j1} {...segmentProps}>
           <BallCollider args={[0.1]} />
@@ -176,7 +177,7 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false, applyUrl }) {
           <CuboidCollider args={[0.8, 1.28, 0.01]} />
           <group
             ref={visualCard}
-            scale={[2.25, 2.55, 2.25]}
+            scale={[2.52, 2.86, 2.52]}
             position={[0, -1.36, -0.05]}
             onPointerOver={() => hover(true)}
             onPointerOut={() => hover(false)}

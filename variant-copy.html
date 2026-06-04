@@ -105,6 +105,143 @@
             font-weight: 700;
         }
 
+        .hero-title-reveal {
+            position: relative;
+            display: block;
+            overflow: hidden;
+            letter-spacing: 0;
+            animation: hero-title-lock 1200ms steps(8, end) 120ms both;
+            will-change: clip-path, transform, text-shadow, filter;
+        }
+
+        .hero-title-reveal::before,
+        .hero-title-reveal::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+
+        .hero-title-reveal::before {
+            background:
+                radial-gradient(circle, rgba(243, 243, 225, 0.95) 0 1px, transparent 1.5px),
+                radial-gradient(circle, rgba(28, 0, 255, 0.98) 0 1px, transparent 1.5px);
+            background-size: 34px 18px, 21px 29px;
+            background-position: 0 0, 11px 7px;
+            clip-path: inset(0 100% 0 0);
+            mix-blend-mode: screen;
+            opacity: 0;
+            transform: translateX(-16%);
+            animation: hero-title-particles 7200ms steps(14, end) 1850ms infinite;
+        }
+
+        .hero-title-reveal::after {
+            background: linear-gradient(
+                90deg,
+                transparent 0%,
+                rgba(28, 0, 255, 0.78) 42%,
+                rgba(243, 243, 225, 0.72) 50%,
+                transparent 64%
+            );
+            mix-blend-mode: difference;
+            transform: translateX(-120%);
+            animation:
+                hero-title-scan 1050ms steps(9, end) 180ms both,
+                hero-title-idle-scan 7200ms steps(11, end) 1850ms infinite;
+        }
+
+        @keyframes hero-title-lock {
+            0% {
+                clip-path: inset(0 0 100% 0);
+                transform: translate3d(10px, 14px, 0) skewX(-2deg);
+                text-shadow: 10px 0 0 var(--blue), -6px 0 0 rgba(243, 243, 225, 0.32);
+                filter: contrast(1.35);
+            }
+            18% {
+                clip-path: inset(0 0 72% 0);
+                transform: translate3d(-7px, 8px, 0) skewX(1.5deg);
+            }
+            36% {
+                clip-path: inset(0 0 45% 0);
+                transform: translate3d(6px, -3px, 0);
+                text-shadow: -8px 0 0 var(--blue), 5px 0 0 rgba(243, 243, 225, 0.25);
+            }
+            58% {
+                clip-path: inset(0 0 18% 0);
+                transform: translate3d(-3px, 2px, 0);
+            }
+            76% {
+                clip-path: inset(0 0 0 0);
+                transform: translate3d(2px, 0, 0);
+                text-shadow: 3px 0 0 var(--blue);
+            }
+            100% {
+                clip-path: inset(0 0 0 0);
+                transform: translate3d(0, 0, 0);
+                text-shadow: none;
+                filter: none;
+            }
+        }
+
+        @keyframes hero-title-scan {
+            0% { transform: translateX(-120%); opacity: 0; }
+            14% { opacity: 1; }
+            72% { opacity: 1; }
+            100% { transform: translateX(120%); opacity: 0; }
+        }
+
+        @keyframes hero-title-idle-scan {
+            0%, 52% {
+                transform: translateX(-120%);
+                opacity: 0;
+            }
+            55% {
+                opacity: 0.92;
+            }
+            63% {
+                opacity: 0.92;
+            }
+            70%, 100% {
+                transform: translateX(120%);
+                opacity: 0;
+            }
+        }
+
+        @keyframes hero-title-particles {
+            0%, 52% {
+                clip-path: inset(0 100% 0 0);
+                opacity: 0;
+                transform: translateX(-16%);
+            }
+            56% {
+                clip-path: inset(0 58% 0 12%);
+                opacity: 0.72;
+            }
+            62% {
+                clip-path: inset(0 22% 0 44%);
+                opacity: 0.5;
+                transform: translateX(8%);
+            }
+            68% {
+                clip-path: inset(0 0 0 78%);
+                opacity: 0.22;
+                transform: translateX(18%);
+            }
+            72%, 100% {
+                clip-path: inset(0 0 0 100%);
+                opacity: 0;
+                transform: translateX(24%);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .hero-title-reveal,
+            .hero-title-reveal::before,
+            .hero-title-reveal::after {
+                animation: none;
+            }
+        }
+
         .separator {
             font-weight: 300;
             opacity: 0.5;
@@ -173,9 +310,103 @@
             -webkit-backdrop-filter: blur(18px);
         }
 
+        .board-grid {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+        }
+
+        .board-card {
+            min-height: 440px;
+            color: var(--fg);
+        }
+
+        .board-card:hover {
+            background: var(--fg);
+            color: var(--bg);
+        }
+
+        .board-portrait {
+            position: relative;
+            aspect-ratio: 4 / 5;
+            width: 100%;
+            border: 2px solid var(--fg);
+            overflow: hidden;
+            background:
+                linear-gradient(rgba(28, 0, 255, 0.72), rgba(28, 0, 255, 0.72)),
+                repeating-linear-gradient(90deg, rgba(243, 243, 225, 0.1) 0 1px, transparent 1px 14px),
+                repeating-linear-gradient(0deg, rgba(243, 243, 225, 0.07) 0 1px, transparent 1px 14px),
+                var(--bg);
+        }
+
+        .board-card:hover .board-portrait {
+            border-color: var(--bg);
+        }
+
+        .board-portrait img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(1) contrast(1.22) sepia(1) saturate(8) hue-rotate(224deg);
+            mix-blend-mode: screen;
+            transition: filter 160ms steps(4, end), mix-blend-mode 160ms steps(2, end);
+        }
+
+        .board-card:hover .board-portrait img {
+            filter: none;
+            mix-blend-mode: normal;
+        }
+
+        .board-initials {
+            position: absolute;
+            inset: 0;
+            display: grid;
+            place-items: center;
+            font-size: clamp(3rem, 6vw, 6rem);
+            font-weight: 900;
+            line-height: 0.82;
+            letter-spacing: -0.08em;
+        }
+
+        .board-card:hover .board-initials {
+            color: var(--bg);
+        }
+
+        .board-link-mark {
+            width: 34px;
+            aspect-ratio: 1;
+            display: grid;
+            place-items: center;
+            border: 2px solid currentColor;
+            font-size: 0.78rem;
+            font-weight: 900;
+            line-height: 1;
+        }
+
+        .board-name {
+            font-size: clamp(1.35rem, 2.05vw, 2.25rem);
+            overflow-wrap: anywhere;
+        }
+
+        @media (max-width: 1024px) {
+            .board-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 640px) {
+            .board-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .board-card {
+                min-height: auto;
+            }
+        }
+
         .apply-lanyard-panel {
             min-height: 760px;
             isolation: isolate;
+            background: var(--bg);
         }
 
         .apply-lanyard-panel:hover {
@@ -185,8 +416,9 @@
 
         #egda-lanyard-root {
             position: absolute;
-            inset: -130px -190px -130px -190px;
-            z-index: 0;
+            inset: 72px 0 0 0;
+            z-index: 2;
+            pointer-events: auto;
         }
 
         .apply-hint {
@@ -280,7 +512,7 @@
             <section class="relative brutalist-border-b glass-bg p-8 md:p-16 lg:p-24 min-h-[40vh] flex flex-col justify-center" vid="31">
                 <div class="label-badge" vid="32">Mission</div>
                 
-                <h1 class="text-5xl md:text-7xl lg:text-8xl font-black uppercase tracking-tighter leading-[0.9] max-w-6xl mb-8" vid="33">
+                <h1 class="hero-title-reveal text-5xl md:text-7xl lg:text-8xl font-black uppercase tracking-tighter leading-[0.9] max-w-6xl mb-8" vid="33">
                     Strengthen the <br vid="34">growth of game <br vid="35">development in Estonia.
                 </h1>
                 
@@ -334,6 +566,14 @@
             
             <section class="relative brutalist-border-b solid-bg flex flex-col" vid="72">
                 <div class="label-badge" vid="73">Membership</div>
+
+                <div class="p-8 md:p-12 lg:p-16 brutalist-border-b" vid="246">
+                    <div class="text-sm font-light italic uppercase stage-title mb-6 text-[#F3F3E1]/70" vid="247">Join EGDA</div>
+                    <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12 items-end" vid="248">
+                        <h2 class="lg:col-span-3 text-5xl md:text-7xl lg:text-8xl font-black uppercase tracking-tighter leading-[0.88]" vid="249">Want to become a member?</h2>
+                        <p class="lg:col-span-2 text-xl md:text-2xl font-light uppercase tracking-tight leading-snug" vid="250">Apply to join the association and help make Estonian game development easier to find, support and grow.</p>
+                    </div>
+                </div>
                 
                 <div class="grid grid-cols-1 lg:grid-cols-5 w-full h-full min-h-[640px]" vid="74">
                     
@@ -425,6 +665,82 @@
                     </div>
                 </div>
 
+            </section>
+
+            
+            <section class="relative brutalist-border-b solid-bg" vid="200">
+                <div class="label-badge" vid="201">Board</div>
+                <div class="p-8 md:p-12 brutalist-border-b" vid="202">
+                    <div class="text-sm font-light italic uppercase stage-title mb-6 text-[#F3F3E1]/70" vid="203">Current Board Members</div>
+                    <h2 class="text-4xl md:text-6xl lg:text-7xl font-black uppercase tracking-tighter leading-[0.9] max-w-5xl" vid="204">People keeping EGDA moving.</h2>
+                </div>
+
+                <div class="board-grid" vid="205">
+                    <a class="board-card brutalist-border-r p-5 md:p-6 flex flex-col gap-6 interactive-cell" href="https://www.linkedin.com/in/helene-vellevoog-11a6b1204/?skipRedirect=true" target="_blank" rel="noopener noreferrer" vid="206">
+                        <div class="board-portrait" vid="207">
+                            <span class="board-initials" vid="208">HV</span>
+                        </div>
+                        <div class="mt-auto flex items-end justify-between gap-5" vid="209">
+                            <div vid="210">
+                                <div class="board-name font-black uppercase tracking-tighter leading-none" vid="211">Helene Vellevoog</div>
+                                <div class="text-xs font-bold uppercase tracking-widest mt-3 opacity-70" vid="212">Board member</div>
+                            </div>
+                            <span class="board-link-mark" aria-hidden="true" vid="213">in</span>
+                        </div>
+                    </a>
+
+                    <a class="board-card brutalist-border-r p-5 md:p-6 flex flex-col gap-6 interactive-cell" href="https://www.linkedin.com/in/kevin-otto-koit/" target="_blank" rel="noopener noreferrer" vid="214">
+                        <div class="board-portrait" vid="215">
+                            <span class="board-initials" vid="216">KK</span>
+                        </div>
+                        <div class="mt-auto flex items-end justify-between gap-5" vid="217">
+                            <div vid="218">
+                                <div class="board-name font-black uppercase tracking-tighter leading-none" vid="219">Kevin Otto Koit</div>
+                                <div class="text-xs font-bold uppercase tracking-widest mt-3 opacity-70" vid="220">Board member</div>
+                            </div>
+                            <span class="board-link-mark" aria-hidden="true" vid="221">in</span>
+                        </div>
+                    </a>
+
+                    <a class="board-card brutalist-border-r p-5 md:p-6 flex flex-col gap-6 interactive-cell" href="https://www.linkedin.com/in/jorehhov/" target="_blank" rel="noopener noreferrer" vid="222">
+                        <div class="board-portrait" vid="223">
+                            <span class="board-initials" vid="224">JO</span>
+                        </div>
+                        <div class="mt-auto flex items-end justify-between gap-5" vid="225">
+                            <div vid="226">
+                                <div class="board-name font-black uppercase tracking-tighter leading-none" vid="227">Jevgeni Orehhov</div>
+                                <div class="text-xs font-bold uppercase tracking-widest mt-3 opacity-70" vid="228">Board member</div>
+                            </div>
+                            <span class="board-link-mark" aria-hidden="true" vid="229">in</span>
+                        </div>
+                    </a>
+
+                    <a class="board-card brutalist-border-r p-5 md:p-6 flex flex-col gap-6 interactive-cell" href="https://www.linkedin.com/in/elisabeth-roonurm-701340287/" target="_blank" rel="noopener noreferrer" vid="230">
+                        <div class="board-portrait" vid="231">
+                            <span class="board-initials" vid="232">ER</span>
+                        </div>
+                        <div class="mt-auto flex items-end justify-between gap-5" vid="233">
+                            <div vid="234">
+                                <div class="board-name font-black uppercase tracking-tighter leading-none" vid="235">Elisabeth Roonurm</div>
+                                <div class="text-xs font-bold uppercase tracking-widest mt-3 opacity-70" vid="236">Board member</div>
+                            </div>
+                            <span class="board-link-mark" aria-hidden="true" vid="237">in</span>
+                        </div>
+                    </a>
+
+                    <a class="board-card p-5 md:p-6 flex flex-col gap-6 interactive-cell" href="https://www.linkedin.com/in/artjom-toht-3990042aa/" target="_blank" rel="noopener noreferrer" vid="238">
+                        <div class="board-portrait" vid="239">
+                            <span class="board-initials" vid="240">AT</span>
+                        </div>
+                        <div class="mt-auto flex items-end justify-between gap-5" vid="241">
+                            <div vid="242">
+                                <div class="board-name font-black uppercase tracking-tighter leading-none" vid="243">Artjom Toht</div>
+                                <div class="text-xs font-bold uppercase tracking-widest mt-3 opacity-70" vid="244">Board member</div>
+                            </div>
+                            <span class="board-link-mark" aria-hidden="true" vid="245">in</span>
+                        </div>
+                    </a>
+                </div>
             </section>
 
             

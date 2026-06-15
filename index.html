@@ -98,19 +98,16 @@
         }
 
         .stage-title {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            color: var(--blue) !important;
-            font-weight: 700;
+            display: block;
+            color: var(--fg) !important;
+            font-size: clamp(1.25rem, 2vw, 1.75rem) !important;
+            font-style: normal !important;
+            font-weight: 900 !important;
+            line-height: 1 !important;
+            letter-spacing: -0.04em !important;
             opacity: 1;
-        }
-
-        .stage-title::before {
-            content: '■';
-            color: var(--blue);
-            font-size: 0.6em;
-            font-weight: 700;
+            -webkit-text-stroke: 1px var(--blue) !important;
+            paint-order: stroke fill;
         }
 
         .accent-text {
@@ -263,8 +260,315 @@
         @media (prefers-reduced-motion: reduce) {
             .hero-title-reveal,
             .hero-title-reveal::before,
-            .hero-title-reveal::after {
+            .hero-title-reveal::after,
+            .hero-constellation-core,
+            .hero-constellation-role,
+            .hero-constellation-satellite,
+            .hero-constellation-flow,
+            .hero-constellation::before,
+            .hero-constellation::after {
                 animation: none;
+            }
+
+            .hero-constellation::before {
+                transform: rotate(-12deg);
+            }
+
+            .hero-constellation::after {
+                transform: rotate(18deg);
+            }
+
+            .hero-constellation-flow.inward {
+                stroke-dashoffset: 0;
+                opacity: 1;
+            }
+        }
+
+        .hero-mission {
+            min-height: clamp(560px, 70vh, 760px);
+        }
+
+        .hero-copy {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-constellation {
+            position: absolute;
+            top: 9%;
+            right: 3.5%;
+            width: min(37vw, 530px);
+            aspect-ratio: 1 / 1;
+            z-index: 1;
+            pointer-events: none;
+            isolation: isolate;
+        }
+
+        .hero-constellation::before,
+        .hero-constellation::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .hero-constellation::before {
+            inset: 7%;
+            border: 2px solid rgba(243, 243, 225, 0.2);
+            border-top-color: rgba(137, 218, 255, 0.78);
+            border-right-color: rgba(243, 243, 225, 0.38);
+            animation: hero-constellation-orbit-clockwise 24s linear infinite;
+        }
+
+        .hero-constellation::after {
+            inset: 27%;
+            border: 2px solid rgba(28, 0, 255, 0.62);
+            border-bottom-color: rgba(137, 218, 255, 0.82);
+            animation: hero-constellation-orbit-counterclockwise 17s linear infinite;
+        }
+
+        .hero-constellation-links {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+        }
+
+        .hero-constellation-line {
+            stroke: rgba(243, 243, 225, 0.62);
+            stroke-width: 1.6;
+            vector-effect: non-scaling-stroke;
+        }
+
+        .hero-constellation-line.primary {
+            stroke: var(--blue);
+            stroke-width: 2.6;
+        }
+
+        .hero-constellation-flow {
+            fill: none;
+            stroke-linecap: round;
+            stroke-dasharray: var(--hero-constellation-flow-length, 500px);
+            stroke-dashoffset: var(--hero-constellation-flow-length, 500px);
+            opacity: 0;
+            vector-effect: non-scaling-stroke;
+        }
+
+        .hero-constellation-flow.outward {
+            stroke: #89DAFF;
+            stroke-width: 4;
+            filter: drop-shadow(0 0 7px rgba(137, 218, 255, 0.95));
+        }
+
+        .hero-constellation-flow.inward {
+            stroke: var(--fg);
+            stroke-width: 3;
+            filter: drop-shadow(0 0 5px var(--fg));
+        }
+
+        .hero-constellation-core {
+            position: absolute;
+            left: 50%;
+            top: 48%;
+            width: clamp(68px, 7vw, 88px);
+            height: clamp(68px, 7vw, 88px);
+            display: grid;
+            place-items: center;
+            transform: translate(-50%, -50%);
+            border: 2px solid var(--fg);
+            border-radius: 50%;
+            background: var(--blue);
+            color: var(--fg);
+            font-size: clamp(0.8rem, 1.2vw, 1rem);
+            font-weight: 900;
+            line-height: 1;
+            letter-spacing: -0.04em;
+            box-shadow:
+                0 0 0 10px rgba(28, 0, 255, 0.12),
+                0 0 42px rgba(28, 0, 255, 0.78);
+            animation: hero-constellation-core-glow 4.8s ease-in-out infinite;
+        }
+
+        .hero-constellation-role {
+            position: absolute;
+            padding: 6px 9px;
+            border: 1px solid var(--blue);
+            background: rgba(21, 21, 22, 0.9);
+            color: var(--fg);
+            font-size: clamp(0.58rem, 0.8vw, 0.72rem);
+            font-weight: 800;
+            line-height: 1;
+            letter-spacing: -0.02em;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .hero-constellation-role::before {
+            content: '';
+            position: absolute;
+            left: -6px;
+            top: 50%;
+            width: 9px;
+            height: 9px;
+            transform: translate(-50%, -50%);
+            border: 2px solid var(--fg);
+            border-radius: 50%;
+            background: var(--blue);
+            box-shadow: 0 0 12px rgba(28, 0, 255, 0.9);
+        }
+
+        .hero-constellation-role.studios {
+            left: 7%;
+            top: 12%;
+            animation: hero-constellation-drift-a 7s ease-in-out infinite alternate;
+        }
+
+        .hero-constellation-role.talent {
+            right: 1%;
+            top: 17%;
+            animation: hero-constellation-drift-b 8.5s ease-in-out infinite alternate;
+        }
+
+        .hero-constellation-role.education {
+            left: 4%;
+            bottom: 10%;
+            animation: hero-constellation-drift-c 9s ease-in-out infinite alternate;
+        }
+
+        .hero-constellation-role.partners {
+            right: 0;
+            bottom: 18%;
+            animation: hero-constellation-drift-d 7.8s ease-in-out infinite alternate;
+        }
+
+        .hero-constellation-satellite {
+            position: absolute;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--fg);
+            box-shadow: 0 0 10px rgba(243, 243, 225, 0.8);
+            animation: hero-constellation-satellite-drift 5s ease-in-out infinite alternate;
+        }
+
+        .hero-constellation-satellite.satellite-a {
+            left: 25%;
+            top: 38%;
+            animation-delay: -1s;
+        }
+
+        .hero-constellation-satellite.satellite-b {
+            right: 14%;
+            top: 43%;
+            animation-delay: -2.2s;
+        }
+
+        .hero-constellation-satellite.satellite-c {
+            left: 34%;
+            bottom: 4%;
+            animation-delay: -3.1s;
+        }
+
+        .hero-constellation-satellite.satellite-d {
+            right: 31%;
+            bottom: 2%;
+            animation-delay: -0.4s;
+        }
+
+        @keyframes hero-constellation-drift-a {
+            to { transform: translate(9px, 14px); }
+        }
+
+        @keyframes hero-constellation-drift-b {
+            to { transform: translate(-12px, 8px); }
+        }
+
+        @keyframes hero-constellation-drift-c {
+            to { transform: translate(11px, -7px); }
+        }
+
+        @keyframes hero-constellation-drift-d {
+            to { transform: translate(-8px, -13px); }
+        }
+
+        @keyframes hero-constellation-satellite-drift {
+            to {
+                transform: translate(7px, -11px);
+                opacity: 0.55;
+            }
+        }
+
+        @keyframes hero-constellation-core-glow {
+            0%, 100% {
+                box-shadow:
+                    0 0 0 10px rgba(28, 0, 255, 0.12),
+                    0 0 42px rgba(28, 0, 255, 0.75);
+            }
+            50% {
+                box-shadow:
+                    0 0 0 16px rgba(28, 0, 255, 0.05),
+                    0 0 54px rgba(28, 0, 255, 0.95);
+            }
+        }
+
+        @keyframes hero-constellation-orbit-clockwise {
+            from { transform: rotate(-12deg); }
+            to { transform: rotate(348deg); }
+        }
+
+        @keyframes hero-constellation-orbit-counterclockwise {
+            from { transform: rotate(18deg); }
+            to { transform: rotate(-342deg); }
+        }
+
+        @media (min-width: 1024px) {
+            .hero-copy {
+                width: 82%;
+            }
+
+            .hero-copy h1 {
+                max-width: 60rem;
+            }
+
+            .hero-copy > div {
+                max-width: 52rem;
+            }
+        }
+
+        @media (max-width: 1023px) {
+            .hero-mission {
+                min-height: auto;
+            }
+
+            .hero-constellation {
+                position: relative;
+                top: auto;
+                right: auto;
+                width: min(100%, 460px);
+                margin: 0 auto 2.5rem;
+            }
+        }
+
+        @media (max-width: 639px) {
+            .hero-constellation {
+                width: 100%;
+                margin-bottom: 2rem;
+            }
+
+            .hero-constellation-satellite.satellite-c,
+            .hero-constellation-satellite.satellite-d {
+                display: none;
+            }
+
+            .hero-constellation-role {
+                padding: 5px 7px;
+                font-size: 0.56rem;
+            }
+
+            .hero-constellation-core {
+                width: 64px;
+                height: 64px;
             }
         }
 
@@ -572,14 +876,47 @@
             </header>
 
             
-            <section class="relative brutalist-border-b glass-bg p-8 md:p-16 lg:p-24 min-h-[40vh] flex flex-col justify-center" vid="31">
+            <section class="hero-mission relative brutalist-border-b glass-bg p-8 md:p-16 lg:p-24 flex flex-col justify-center" vid="31">
                 <div class="label-badge" vid="32">Mission</div>
                 
-                <h1 class="hero-title-reveal text-5xl md:text-7xl lg:text-8xl font-black uppercase tracking-tighter leading-[0.9] max-w-6xl mb-8" vid="33">
-                    Strengthen the <br vid="34">growth of game <br vid="35">development in <span class="accent-outline">Estonia.</span>
-                </h1>
+                <div class="hero-copy">
+                    <h1 class="hero-title-reveal text-5xl md:text-7xl lg:text-8xl font-black uppercase tracking-tighter leading-[0.9] max-w-6xl mb-8" vid="33">
+                        Strengthen the <br vid="34">growth of game <br vid="35">development in <span class="accent-outline">Estonia.</span>
+                    </h1>
+                </div>
+
+                <div class="hero-constellation" aria-hidden="true">
+                    <svg class="hero-constellation-links" aria-hidden="true">
+                        <line class="hero-constellation-line" data-from="core" data-to="studios"></line>
+                        <line class="hero-constellation-line primary" data-from="core" data-to="talent"></line>
+                        <line class="hero-constellation-line" data-from="core" data-to="education"></line>
+                        <line class="hero-constellation-line" data-from="core" data-to="partners"></line>
+                        <line class="hero-constellation-line" data-from="studios" data-to="talent"></line>
+                        <line class="hero-constellation-line" data-from="education" data-to="partners"></line>
+
+                        <line class="hero-constellation-flow outward" data-from="core" data-to="studios"></line>
+                        <line class="hero-constellation-flow outward" data-from="core" data-to="talent"></line>
+                        <line class="hero-constellation-flow outward" data-from="core" data-to="education"></line>
+                        <line class="hero-constellation-flow outward" data-from="core" data-to="partners"></line>
+
+                        <line class="hero-constellation-flow inward" data-from="studios" data-to="core"></line>
+                        <line class="hero-constellation-flow inward" data-from="talent" data-to="core"></line>
+                        <line class="hero-constellation-flow inward" data-from="education" data-to="core"></line>
+                        <line class="hero-constellation-flow inward" data-from="partners" data-to="core"></line>
+                    </svg>
+
+                    <div class="hero-constellation-core" data-constellation-node="core">EGDA</div>
+                    <div class="hero-constellation-role studios" data-constellation-node="studios">Studios</div>
+                    <div class="hero-constellation-role talent" data-constellation-node="talent">Talent</div>
+                    <div class="hero-constellation-role education" data-constellation-node="education">Education</div>
+                    <div class="hero-constellation-role partners" data-constellation-node="partners">Partners</div>
+                    <span class="hero-constellation-satellite satellite-a"></span>
+                    <span class="hero-constellation-satellite satellite-b"></span>
+                    <span class="hero-constellation-satellite satellite-c"></span>
+                    <span class="hero-constellation-satellite satellite-d"></span>
+                </div>
                 
-                <div class="max-w-4xl" vid="36">
+                <div class="hero-copy max-w-4xl" vid="36">
                     <p class="text-xl md:text-2xl font-light uppercase tracking-tight leading-snug" vid="37">
                         <span class="font-bold" vid="38">EGDA</span> is a new non-profit organisation representing and supporting Estonia’s video game industry. We exist to bring together people and organisations working in and around games.
                     </p>
@@ -839,6 +1176,142 @@
 
         </main>
     </div>
+
+    <script>
+        (() => {
+            const constellation = document.querySelector('.hero-constellation');
+
+            if (!constellation) {
+                return;
+            }
+
+            const links = constellation.querySelectorAll('[data-from][data-to]');
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+            const flowStartedAt = Date.now();
+            const outwardFlows = Array.from(
+                constellation.querySelectorAll('.hero-constellation-flow.outward')
+            );
+            const inwardFlows = Array.from(
+                constellation.querySelectorAll('.hero-constellation-flow.inward')
+            );
+            let activeFlowLayer = '';
+
+            const updateConstellationLinks = (updateFlowLengths = false) => {
+                const constellationBounds = constellation.getBoundingClientRect();
+
+                links.forEach((link) => {
+                    const fromNode = constellation.querySelector(
+                        `[data-constellation-node="${link.dataset.from}"]`
+                    );
+                    const toNode = constellation.querySelector(
+                        `[data-constellation-node="${link.dataset.to}"]`
+                    );
+
+                    if (!fromNode || !toNode) {
+                        return;
+                    }
+
+                    const fromBounds = fromNode.getBoundingClientRect();
+                    const toBounds = toNode.getBoundingClientRect();
+
+                    link.setAttribute(
+                        'x1',
+                        fromBounds.left + fromBounds.width / 2 - constellationBounds.left
+                    );
+                    link.setAttribute(
+                        'y1',
+                        fromBounds.top + fromBounds.height / 2 - constellationBounds.top
+                    );
+                    link.setAttribute(
+                        'x2',
+                        toBounds.left + toBounds.width / 2 - constellationBounds.left
+                    );
+                    link.setAttribute(
+                        'y2',
+                        toBounds.top + toBounds.height / 2 - constellationBounds.top
+                    );
+
+                    if (
+                        link.classList.contains('hero-constellation-flow') &&
+                        (
+                            updateFlowLengths ||
+                            !link.style.getPropertyValue('--hero-constellation-flow-length')
+                        )
+                    ) {
+                        const deltaX =
+                            toBounds.left + toBounds.width / 2 -
+                            (fromBounds.left + fromBounds.width / 2);
+                        const deltaY =
+                            toBounds.top + toBounds.height / 2 -
+                            (fromBounds.top + fromBounds.height / 2);
+                        const length = Math.hypot(deltaX, deltaY);
+
+                        link.style.setProperty(
+                            '--hero-constellation-flow-length',
+                            `${length}px`
+                        );
+                    }
+                });
+            };
+
+            const updateConstellationFlow = () => {
+                const duration = 6000;
+                const phase = ((Date.now() - flowStartedAt) % duration) / duration;
+                const ease = (progress) =>
+                    progress * progress * (3 - 2 * progress);
+                const isOutwardPhase = phase < 0.5;
+                const nextLayer = isOutwardPhase ? 'outward' : 'inward';
+
+                if (nextLayer !== activeFlowLayer) {
+                    const topLayer = isOutwardPhase ? outwardFlows : inwardFlows;
+
+                    topLayer.forEach((flow) => flow.parentNode.appendChild(flow));
+                    activeFlowLayer = nextLayer;
+                }
+
+                constellation
+                    .querySelectorAll('.hero-constellation-flow')
+                    .forEach((flow) => {
+                        const length = Number(
+                            flow.style
+                                .getPropertyValue('--hero-constellation-flow-length')
+                                .replace('px', '')
+                        );
+                        const isOutward = flow.classList.contains('outward');
+                        const progress = isOutward
+                            ? (
+                                isOutwardPhase
+                                    ? Math.min(phase / 0.42, 1)
+                                    : 1
+                            )
+                            : (
+                                isOutwardPhase
+                                    ? 1
+                                    : Math.min((phase - 0.5) / 0.42, 1)
+                            );
+
+                        flow.style.strokeDashoffset = `${length * (1 - ease(progress))}px`;
+                        flow.style.opacity = 1;
+                    });
+            };
+
+            const animateConstellationLinks = () => {
+                updateConstellationLinks();
+
+                requestAnimationFrame(animateConstellationLinks);
+            };
+
+            updateConstellationLinks(true);
+
+            if (!prefersReducedMotion.matches) {
+                updateConstellationFlow();
+                window.setInterval(updateConstellationFlow, 16);
+                requestAnimationFrame(animateConstellationLinks);
+            }
+
+            window.addEventListener('resize', () => updateConstellationLinks(true));
+        })();
+    </script>
 
     
     <script vid="147">

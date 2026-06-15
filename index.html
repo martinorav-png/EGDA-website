@@ -15,6 +15,8 @@
             --fg: #F3F3E1;
             --fg-dim: rgba(243, 243, 225, 0.6);
             --blue: #1C00FF;
+            --blue-soft: rgba(28, 0, 255, 0.14);
+            --blue-line: rgba(28, 0, 255, 0.72);
             --grid-line: 1px solid var(--fg);
             --font-main: 'Inter', -apple-system, sans-serif;
         }
@@ -76,9 +78,10 @@
             position: absolute;
             top: -1px; 
             right: -1px; 
-            background: var(--bg);
-            border-left: var(--grid-line);
-            border-bottom: var(--grid-line);
+            background: var(--blue);
+            color: var(--fg);
+            border-left: 1px solid var(--fg);
+            border-bottom: 1px solid var(--fg);
             padding: 4px 12px;
             font-size: 0.75rem;
             font-weight: 700;
@@ -98,11 +101,28 @@
             display: flex;
             align-items: center;
             gap: 6px;
+            color: var(--blue) !important;
+            font-weight: 700;
+            opacity: 1;
         }
 
         .stage-title::before {
-            content: '';
+            content: '■';
+            color: var(--blue);
+            font-size: 0.6em;
             font-weight: 700;
+        }
+
+        .accent-text {
+            color: var(--blue);
+        }
+
+        .accent-panel {
+            box-shadow: inset 0 4px 0 var(--blue);
+        }
+
+        .accent-panel-left {
+            box-shadow: inset 4px 0 0 var(--blue);
         }
 
         .hero-title-reveal {
@@ -244,7 +264,8 @@
 
         .separator {
             font-weight: 300;
-            opacity: 0.5;
+            color: var(--blue);
+            opacity: 1;
             margin: 0 4px;
         }
 
@@ -253,12 +274,12 @@
             transition: background 0.1s, color 0.1s;
         }
         .interactive-cell:hover, .interactive-cell:active {
-            background: var(--fg);
-            color: var(--bg);
+            background: var(--blue);
+            color: var(--fg);
         }
         .interactive-cell:hover svg, .interactive-cell:active svg {
-            stroke: var(--bg);
-            fill: var(--bg);
+            stroke: var(--fg);
+            fill: var(--fg);
         }
         .interactive-cell:hover svg[fill="none"], .interactive-cell:active svg[fill="none"] {
             fill: none;
@@ -321,8 +342,8 @@
         }
 
         .board-card:hover {
-            background: var(--fg);
-            color: var(--bg);
+            background: var(--blue);
+            color: var(--fg);
         }
 
         .board-portrait {
@@ -339,7 +360,7 @@
         }
 
         .board-card:hover .board-portrait {
-            border-color: var(--bg);
+            border-color: var(--fg);
         }
 
         .board-portrait img {
@@ -368,7 +389,7 @@
         }
 
         .board-card:hover .board-initials {
-            color: var(--bg);
+            color: var(--fg);
         }
 
         .board-link-mark {
@@ -407,6 +428,7 @@
             min-height: 760px;
             isolation: isolate;
             background: var(--bg);
+            box-shadow: inset 4px 0 0 var(--blue), inset 0 4px 0 var(--blue);
         }
 
         .apply-lanyard-panel:hover {
@@ -431,8 +453,43 @@
             color: var(--fg);
         }
 
+        .benefit-row svg {
+            color: var(--blue);
+        }
+
+        .news-placeholder {
+            border-color: var(--blue-line) !important;
+            background:
+                linear-gradient(135deg, var(--blue-soft), transparent 44%),
+                var(--bg);
+        }
+
+        .news-placeholder svg,
+        .footer-mark,
+        .footer-link:hover {
+            color: var(--blue);
+        }
+
+        .membership-intro {
+            background:
+                linear-gradient(90deg, var(--blue-soft), transparent 48%),
+                var(--bg);
+        }
+
+        .footer-link {
+            text-decoration-color: var(--blue);
+        }
+
+        @media (max-width: 1024px) {
+            .accent-panel-left,
+            .apply-lanyard-panel {
+                box-shadow: inset 0 4px 0 var(--blue);
+            }
+        }
+
         .apply-hint span {
             display: block;
+            color: var(--blue);
             font-size: clamp(0.8rem, 1.1vw, 0.95rem);
             font-weight: 900;
             line-height: 0.95;
@@ -513,7 +570,7 @@
                 <div class="label-badge" vid="32">Mission</div>
                 
                 <h1 class="hero-title-reveal text-5xl md:text-7xl lg:text-8xl font-black uppercase tracking-tighter leading-[0.9] max-w-6xl mb-8" vid="33">
-                    Strengthen the <br vid="34">growth of game <br vid="35">development in Estonia.
+                    Strengthen the <br vid="34">growth of game <br vid="35">development in <span class="accent-text">Estonia.</span>
                 </h1>
                 
                 <div class="max-w-4xl" vid="36">
@@ -527,7 +584,7 @@
             <section class="grid grid-cols-1 lg:grid-cols-2 brutalist-border-b solid-bg" vid="39">
                 
                 
-                <div class="relative p-8 md:p-12 brutalist-border-r" vid="40">
+                <div class="relative p-8 md:p-12 brutalist-border-r accent-panel" vid="40">
                     <div class="label-badge" vid="41">Main Goals</div>
                     <div class="text-sm font-light italic uppercase stage-title mb-6 text-[#F3F3E1]/70" vid="42">Objectives</div>
                     
@@ -539,12 +596,12 @@
                 </div>
 
                 
-                <div class="relative p-8 md:p-12 flex flex-col" vid="47">
+                <div class="relative p-8 md:p-12 flex flex-col accent-panel" vid="47">
                     <div class="label-badge" vid="48">Community</div>
                     <div class="text-sm font-light italic uppercase stage-title mb-6 text-[#F3F3E1]/70" vid="49">Representing</div>
                     
                     <div class="mt-auto mb-auto" vid="50">
-                        <h2 class="text-2xl font-bold uppercase tracking-tight mb-8" vid="51">Everyone is welcome to apply and contribute to the ecosystem.</h2>
+                        <h2 class="text-2xl font-bold uppercase tracking-tight mb-8" vid="51">Everyone is welcome to apply and <span class="accent-text">contribute to the ecosystem.</span></h2>
                         
                         <div class="flex flex-wrap gap-y-4 gap-x-2 text-xl md:text-3xl font-black uppercase tracking-tighter leading-none" vid="52">
                             <span vid="53">Developers</span> <span class="separator" vid="54">,</span>
@@ -567,10 +624,10 @@
             <section class="relative brutalist-border-b solid-bg flex flex-col" vid="72">
                 <div class="label-badge" vid="73">Membership</div>
 
-                <div class="p-8 md:p-12 lg:p-16 brutalist-border-b" vid="246">
+                <div class="p-8 md:p-12 lg:p-16 brutalist-border-b membership-intro accent-panel" vid="246">
                     <div class="text-sm font-light italic uppercase stage-title mb-6 text-[#F3F3E1]/70" vid="247">Join EGDA</div>
                     <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12 items-end" vid="248">
-                        <h2 class="lg:col-span-3 text-5xl md:text-7xl lg:text-8xl font-black uppercase tracking-tighter leading-[0.88]" vid="249">Want to become a member?</h2>
+                        <h2 class="lg:col-span-3 text-5xl md:text-7xl lg:text-8xl font-black uppercase tracking-tighter leading-[0.88]" vid="249">Want to become a <span class="accent-text">member?</span></h2>
                         <p class="lg:col-span-2 text-xl md:text-2xl font-light uppercase tracking-tight leading-snug" vid="250">Apply to join the association and help make Estonian game development easier to find, support and grow.</p>
                     </div>
                 </div>
@@ -578,27 +635,27 @@
                 <div class="grid grid-cols-1 lg:grid-cols-5 w-full h-full min-h-[640px]" vid="74">
                     
                     
-                    <div class="col-span-1 lg:col-span-3 p-8 md:p-16 lg:p-20 brutalist-border-r flex flex-col justify-center" vid="75">
+                    <div class="col-span-1 lg:col-span-3 p-8 md:p-16 lg:p-20 brutalist-border-r flex flex-col justify-center accent-panel-left" vid="75">
                         <div class="text-base font-light italic uppercase stage-title mb-10 text-[#F3F3E1]/70" vid="76">Membership Benefits</div>
                         
                         <div class="space-y-8" vid="77">
-                            <div class="flex items-start gap-5" vid="78">
+                            <div class="benefit-row flex items-start gap-5" vid="78">
                                 <svg class="w-7 h-7 mt-1 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" vid="79"><path stroke-linecap="square" stroke-linejoin="miter" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" vid="80"></path></svg>
                                 <p class="text-2xl md:text-3xl font-bold uppercase tracking-tight leading-tight" vid="81">Representation in Estonia’s game development community</p>
                             </div>
-                            <div class="flex items-start gap-5" vid="82">
+                            <div class="benefit-row flex items-start gap-5" vid="82">
                                 <svg class="w-7 h-7 mt-1 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" vid="83"><path stroke-linecap="square" stroke-linejoin="miter" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" vid="84"></path></svg>
                                 <p class="text-2xl md:text-3xl font-bold uppercase tracking-tight leading-tight" vid="85">Access to shared industry contacts and platforms <span class="font-light italic text-[#F3F3E1]/60" vid="86">(with consent)</span></p>
                             </div>
-                            <div class="flex items-start gap-5" vid="87">
+                            <div class="benefit-row flex items-start gap-5" vid="87">
                                 <svg class="w-7 h-7 mt-1 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" vid="88"><path stroke-linecap="square" stroke-linejoin="miter" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" vid="89"></path></svg>
                                 <p class="text-2xl md:text-3xl font-bold uppercase tracking-tight leading-tight" vid="90">Participation in general meetings and voting</p>
                             </div>
-                            <div class="flex items-start gap-5" vid="91">
+                            <div class="benefit-row flex items-start gap-5" vid="91">
                                 <svg class="w-7 h-7 mt-1 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" vid="92"><path stroke-linecap="square" stroke-linejoin="miter" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" vid="93"></path></svg>
                                 <p class="text-2xl md:text-3xl font-bold uppercase tracking-tight leading-tight" vid="94">Updates about EGDA activities and budget use</p>
                             </div>
-                            <div class="flex items-start gap-5" vid="95">
+                            <div class="benefit-row flex items-start gap-5" vid="95">
                                 <svg class="w-7 h-7 mt-1 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" vid="96"><path stroke-linecap="square" stroke-linejoin="miter" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" vid="97"></path></svg>
                                 <p class="text-2xl md:text-3xl font-bold uppercase tracking-tight leading-tight" vid="98">Opportunity to help shape the future of game development in Estonia</p>
                             </div>
@@ -634,11 +691,11 @@
             <section class="grid grid-cols-1 md:grid-cols-2 flex-grow solid-bg" vid="111">
                 
                 
-                <div class="relative p-8 md:p-12 brutalist-border-r brutalist-border-b md:brutalist-border-b-0 min-h-[400px] flex flex-col" vid="112">
+                <div class="relative p-8 md:p-12 brutalist-border-r brutalist-border-b md:brutalist-border-b-0 min-h-[400px] flex flex-col accent-panel" vid="112">
                     <div class="label-badge" vid="113">EGDA News</div>
                     <div class="text-sm font-light italic uppercase stage-title mb-8 text-[#F3F3E1]/70" vid="114">Association updates</div>
                     
-                    <div class="flex-grow flex items-center justify-center border border-dashed border-[#F3F3E1]/30 p-8" vid="115">
+                    <div class="news-placeholder flex-grow flex items-center justify-center border border-dashed border-[#F3F3E1]/30 p-8" vid="115">
                         <div class="text-center opacity-50" vid="116">
                             <svg class="w-8 h-8 mx-auto mb-4 animate-pulse" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" vid="117">
                                 <path stroke-linecap="square" stroke-linejoin="miter" d="M8.25 21v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21m0 0h4.5V3.545M12.75 21h7.5V10.75M2.25 21h1.5m18 0h-18M2.25 9l4.5-1.636M18.75 3l-1.5.545m0 6.205 3 1m1.5.5-1.5-.5M6.75 7.364V3h-3v18m3-13.636 10.5-3.819" vid="118"></path>
@@ -650,11 +707,11 @@
                 </div>
 
                 
-                <div class="relative p-8 md:p-12 min-h-[400px] flex flex-col brutalist-border-b md:brutalist-border-b-0" vid="121">
+                <div class="relative p-8 md:p-12 min-h-[400px] flex flex-col brutalist-border-b md:brutalist-border-b-0 accent-panel" vid="121">
                     <div class="label-badge" vid="122">Game News</div>
                     <div class="text-sm font-light italic uppercase stage-title mb-8 text-[#F3F3E1]/70" vid="123">Local game development news</div>
                     
-                    <div class="flex-grow flex items-center justify-center border border-dashed border-[#F3F3E1]/30 p-8" vid="124">
+                    <div class="news-placeholder flex-grow flex items-center justify-center border border-dashed border-[#F3F3E1]/30 p-8" vid="124">
                         <div class="text-center opacity-50" vid="125">
                             <svg class="w-8 h-8 mx-auto mb-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" vid="126">
                                 <path stroke-linecap="square" stroke-linejoin="miter" d="m21 7.5-9-5.25L3 7.5m18 0-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" vid="127"></path>
@@ -670,9 +727,9 @@
             
             <section class="relative brutalist-border-b solid-bg" vid="200">
                 <div class="label-badge" vid="201">Board</div>
-                <div class="p-8 md:p-12 brutalist-border-b" vid="202">
+                <div class="p-8 md:p-12 brutalist-border-b accent-panel" vid="202">
                     <div class="text-sm font-light italic uppercase stage-title mb-6 text-[#F3F3E1]/70" vid="203">Current Board Members</div>
-                    <h2 class="text-4xl md:text-6xl lg:text-7xl font-black uppercase tracking-tighter leading-[0.9] max-w-5xl" vid="204">People keeping EGDA moving.</h2>
+                    <h2 class="text-4xl md:text-6xl lg:text-7xl font-black uppercase tracking-tighter leading-[0.9] max-w-5xl" vid="204">People keeping <span class="accent-text">EGDA</span> moving.</h2>
                 </div>
 
                 <div class="board-grid" vid="205">
@@ -744,13 +801,13 @@
             </section>
 
             
-            <footer class="footer-glass brutalist-border-t p-8 md:p-12" vid="130">
+            <footer class="footer-glass brutalist-border-t p-8 md:p-12 accent-panel" vid="130">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-end" vid="131">
                     
                     <div vid="132">
                         <div class="flex items-center gap-3 mb-4" vid="133">
                             <span class="text-3xl font-black uppercase tracking-tighter" vid="134">EGDA</span>
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" vid="135">
+                            <svg class="footer-mark w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" vid="135">
                                 <circle cx="12" cy="12" r="10" vid="136"></circle>
                                 <path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01" stroke-linecap="round" vid="137"></path>
                             </svg>
@@ -763,10 +820,10 @@
                     </div>
 
                     <div class="flex flex-col md:items-end justify-end space-y-4" vid="142">
-                         <a href="mailto:info.egda@gmail.com" class="text-xl font-bold uppercase tracking-tight hover:underline underline-offset-4 decoration-2" vid="143">
+                         <a href="mailto:info.egda@gmail.com" class="footer-link text-xl font-bold uppercase tracking-tight hover:underline underline-offset-4 decoration-2" vid="143">
                              info.egda@gmail.com
                          </a>
-                         <a href="https://discord.gg/mTkj64Aj4" target="_blank" class="text-xl font-bold uppercase tracking-tight hover:underline underline-offset-4 decoration-2 flex items-center gap-2" vid="144">
+                         <a href="https://discord.gg/mTkj64Aj4" target="_blank" class="footer-link text-xl font-bold uppercase tracking-tight hover:underline underline-offset-4 decoration-2 flex items-center gap-2" vid="144">
                              Join Discord
                              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" vid="145"><path stroke-linecap="square" stroke-linejoin="miter" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" vid="146"></path></svg>
                          </a>

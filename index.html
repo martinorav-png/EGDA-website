@@ -5,7 +5,7 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com" vid="5">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" vid="6">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;800;900&amp;display=swap" rel="stylesheet" vid="7">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;800;900&amp;family=Press+Start+2P&amp;display=swap" rel="stylesheet" vid="7">
     <script src="https://cdn.tailwindcss.com/3.4.17" vid="8"></script>
     <script type="module" src="/src/lanyard-entry.jsx"></script>
     
@@ -19,6 +19,7 @@
             --blue-line: rgba(28, 0, 255, 0.72);
             --grid-line: 1px solid var(--fg);
             --font-main: 'Inter', -apple-system, sans-serif;
+            --font-pixel: 'Press Start 2P', monospace;
         }
 
         * {
@@ -39,39 +40,269 @@
             overscroll-behavior-y: none;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+        }
+
+        body.is-loading {
+            overflow: hidden;
+        }
+
         ::selection {
             background: var(--fg);
             color: var(--blue);
         }
 
-        #glcanvas {
+        .site-loader {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: 0;
+            inset: 0;
+            z-index: 120;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            background:
+                radial-gradient(circle at 50% 36%, rgba(28, 0, 255, 0.2), transparent 26%),
+                linear-gradient(180deg, rgba(243, 243, 225, 0.04), transparent 34%),
+                var(--bg);
+            overflow: hidden;
+            transition: opacity 420ms ease, visibility 420ms ease;
+        }
+
+        .site-loader.is-hidden {
+            opacity: 0;
+            visibility: hidden;
             pointer-events: none;
         }
 
-        .marquee-container {
-            overflow: hidden;
-            white-space: nowrap;
+        .site-loader-grid,
+        .site-loader-particles,
+        .site-loader-scanlines {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+
+        .site-loader-grid {
+            top: -20%;
+            left: -20%;
+            width: 140%;
+            height: 140%;
+            background:
+                linear-gradient(rgba(243, 243, 225, 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(243, 243, 225, 0.08) 1px, transparent 1px);
+            background-size: 60px 60px;
+            background-position: center center;
+            filter: url(#site-loader-warp-filter);
+            opacity: 0.54;
+            animation: loader-breathe-intense 4s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
+        }
+
+        .site-loader-scanlines {
+            background: repeating-linear-gradient(
+                180deg,
+                rgba(243, 243, 225, 0.025) 0 1px,
+                transparent 1px 4px
+            );
+            opacity: 0.58;
+        }
+
+        .site-loader-particles {
+            z-index: 1;
+        }
+
+        .site-loader-particle {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.6;
             background: var(--fg);
-            color: var(--bg);
-            padding: 4px 0;
+            animation: loader-float-up linear infinite;
+        }
+
+        .site-loader-particle:nth-child(1) { left: 10%; width: 4px; height: 4px; animation-duration: 4s; animation-delay: 0s; }
+        .site-loader-particle:nth-child(2) { left: 30%; width: 6px; height: 6px; animation-duration: 5s; animation-delay: 1s; }
+        .site-loader-particle:nth-child(3) { left: 50%; width: 3px; height: 3px; animation-duration: 3s; animation-delay: 2s; }
+        .site-loader-particle:nth-child(4) { left: 70%; width: 8px; height: 8px; animation-duration: 6s; animation-delay: 0.5s; background: rgba(28, 0, 255, 0.78); }
+        .site-loader-particle:nth-child(5) { left: 85%; width: 5px; height: 5px; animation-duration: 4.5s; animation-delay: 1.5s; background: rgba(243, 243, 225, 0.36); }
+        .site-loader-particle:nth-child(6) { left: 20%; width: 7px; height: 7px; animation-duration: 5.5s; animation-delay: 2.5s; background: rgba(243, 243, 225, 0.18); }
+        .site-loader-particle:nth-child(7) { left: 60%; width: 4px; height: 4px; animation-duration: 3.5s; animation-delay: 0.2s; }
+        .site-loader-particle:nth-child(8) { left: 40%; width: 6px; height: 6px; animation-duration: 4.8s; animation-delay: 1.8s; }
+        .site-loader-particle:nth-child(9) { left: 90%; width: 3px; height: 3px; animation-duration: 3.2s; animation-delay: 0.8s; }
+        .site-loader-particle:nth-child(10) { left: 15%; width: 5px; height: 5px; animation-duration: 5.2s; animation-delay: 1.2s; }
+
+        .site-loader-shell {
+            position: relative;
+            z-index: 5;
+            width: min(100%, 640px);
             display: flex;
-            border-bottom: var(--grid-line);
+            flex-direction: column;
+            align-items: center;
+            gap: 2.1rem;
+            text-align: center;
+            transform: translateY(-5vh);
         }
 
-        .marquee-content {
-            display: inline-block;
-            animation: marquee 25s linear infinite;
+        .site-loader-core {
+            position: relative;
+            width: clamp(150px, 22vw, 250px);
+            height: clamp(150px, 22vw, 250px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        @keyframes marquee {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
+        .site-loader-blob {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            background: var(--blue);
+            border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+            animation: loader-morph 3s ease-in-out infinite both alternate, loader-spin 12s linear infinite;
+            box-shadow: 0 0 40px rgba(28, 0, 255, 0.28);
+            mix-blend-mode: screen;
+        }
+
+        .site-loader-blob:nth-child(2) {
+            background: rgba(243, 243, 225, 0.34);
+            animation-delay: -1s;
+            animation-duration: 4s;
+            opacity: 0.8;
+            border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+        }
+
+        .site-loader-blob:nth-child(3) {
+            background: rgba(243, 243, 225, 0.16);
+            animation-delay: -2s;
+            animation-duration: 5s;
+            opacity: 0.6;
+            border-radius: 30% 70% 50% 50% / 50% 60% 40% 60%;
+        }
+
+        .site-loader-copy {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.9rem;
+        }
+
+        .site-loader-title {
+            font-size: clamp(3rem, 5vw, 5rem);
+            font-weight: 700;
+            letter-spacing: -0.04em;
+            color: var(--fg);
+            margin: 0;
+            line-height: 0.9;
+            text-transform: uppercase;
+        }
+
+        .site-loader-ellipsis::after {
+            content: '';
+            animation: loader-dots 1.5s steps(4, end) infinite;
+        }
+
+        .site-loader-status {
+            font-family: var(--font-pixel);
+            font-size: 0.52rem;
+            line-height: 1.9;
+            text-transform: uppercase;
+            color: rgba(243, 243, 225, 0.78);
+        }
+
+        .site-loader-progress {
+            width: min(100%, 220px);
+            display: grid;
+            gap: 0.55rem;
+        }
+
+        .site-loader-progress-bar {
+            position: relative;
+            height: 4px;
+            background: rgba(243, 243, 225, 0.18);
+            overflow: hidden;
+        }
+
+        .site-loader-progress-fill {
+            position: absolute;
+            inset: 0 auto 0 0;
+            width: calc(var(--progress, 0) * 1%);
+            height: 100%;
+            background: var(--fg);
+            box-shadow: 0 0 14px rgba(243, 243, 225, 0.16);
+            transition: width 160ms steps(4, end);
+            animation: loader-progress-pulse 2s ease-in-out infinite alternate;
+        }
+
+        .site-loader-progress-meta {
+            font-size: 1rem;
+            color: rgba(243, 243, 225, 0.76);
+            font-style: italic;
+            font-weight: 500;
+            justify-content: center;
+        }
+
+        @keyframes loader-breathe-intense {
+            0% { transform: scale(1) translate(0, 0) rotate(0deg); }
+            50% { transform: scale(1.1) translate(-2%, -2%) rotate(1deg); }
+            100% { transform: scale(1.05) translate(2%, 2%) rotate(-1deg); }
+        }
+
+        @keyframes loader-morph {
+            0% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
+            33% { border-radius: 70% 30% 50% 50% / 30% 30% 70% 70%; }
+            66% { border-radius: 100% 60% 60% 100% / 100% 100% 60% 60%; }
+            100% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
+        }
+
+        @keyframes loader-spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes loader-dots {
+            0%, 20% { content: ''; }
+            40% { content: '.'; }
+            60% { content: '..'; }
+            80%, 100% { content: '...'; }
+        }
+
+        @keyframes loader-progress-pulse {
+            0% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+
+        @keyframes loader-float-up {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            20% { opacity: 0.6; }
+            80% { opacity: 0.6; }
+            100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+        }
+
+        @media (max-width: 900px) {
+            .site-loader-core {
+                width: 200px;
+                height: 200px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .site-loader-core {
+                width: 150px;
+                height: 150px;
+            }
+
+            .site-loader-title {
+                font-size: 2.5rem;
+            }
+
+            .site-loader-grid {
+                background-size: 40px 40px;
+            }
         }
 
         .label-badge {
@@ -126,6 +357,233 @@
 
         .accent-panel-left {
             box-shadow: inset 4px 0 0 var(--blue);
+        }
+
+        .objectives-showcase {
+            display: grid;
+            gap: 1.25rem;
+        }
+
+        .objectives-showcase-header {
+            display: grid;
+            gap: 0.55rem;
+            max-width: 42rem;
+        }
+
+        .objectives-kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            color: rgba(243, 243, 225, 0.72);
+            font-family: var(--font-pixel);
+            font-size: 0.52rem;
+            line-height: 1.8;
+            text-transform: uppercase;
+        }
+
+        .objectives-kicker::before,
+        .objectives-kicker::after {
+            content: '';
+            width: 10px;
+            height: 10px;
+            border: 2px solid var(--blue);
+            transform: rotate(45deg);
+            box-shadow: 0 0 0 1px rgba(243, 243, 225, 0.18);
+        }
+
+        .objectives-heading {
+            max-width: 14ch;
+            font-size: clamp(2.3rem, 4.4vw, 4.8rem);
+            font-weight: 900;
+            line-height: 0.9;
+            letter-spacing: -0.045em;
+            text-transform: uppercase;
+        }
+
+        .objectives-card-row {
+            display: grid;
+            grid-auto-flow: column;
+            grid-auto-columns: minmax(220px, 1fr);
+            gap: 1rem;
+            overflow-x: auto;
+            padding-bottom: 0.35rem;
+            scrollbar-width: thin;
+            scrollbar-color: var(--blue) rgba(243, 243, 225, 0.12);
+        }
+
+        .objectives-card-row::-webkit-scrollbar {
+            height: 10px;
+        }
+
+        .objectives-card-row::-webkit-scrollbar-track {
+            background: rgba(243, 243, 225, 0.08);
+        }
+
+        .objectives-card-row::-webkit-scrollbar-thumb {
+            background: var(--blue);
+            border: 2px solid rgba(10, 10, 10, 0.88);
+        }
+
+        .objective-card {
+            position: relative;
+            min-height: 320px;
+            padding: 1.4rem 1.15rem 1.15rem;
+            border: 2px solid var(--fg);
+            background:
+                radial-gradient(circle at top center, rgba(28, 0, 255, 0.14), transparent 34%),
+                linear-gradient(180deg, rgba(243, 243, 225, 0.04), transparent 26%),
+                rgba(10, 10, 10, 0.92);
+            box-shadow: 8px 8px 0 rgba(28, 0, 255, 0.24);
+            display: grid;
+            grid-template-rows: auto auto 1fr auto;
+            gap: 0.9rem;
+            overflow: hidden;
+        }
+
+        .objective-card::before,
+        .objective-card::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-color: var(--fg);
+            opacity: 0.84;
+        }
+
+        .objective-card::before {
+            inset: 8px auto auto 8px;
+            border-top: 2px solid var(--fg);
+            border-left: 2px solid var(--fg);
+        }
+
+        .objective-card::after {
+            inset: auto 8px 8px auto;
+            border-right: 2px solid var(--fg);
+            border-bottom: 2px solid var(--fg);
+        }
+
+        .objective-card-badge {
+            width: 64px;
+            height: 64px;
+            border: 2px solid var(--fg);
+            background:
+                linear-gradient(180deg, rgba(243, 243, 225, 0.14), rgba(28, 0, 255, 0.2)),
+                var(--blue);
+            box-shadow: 4px 4px 0 rgba(243, 243, 225, 0.14);
+            position: relative;
+            display: grid;
+            place-items: center;
+        }
+
+        .objective-card-badge::before,
+        .objective-card-badge::after {
+            content: '';
+            position: absolute;
+            background: var(--fg);
+        }
+
+        .objective-card-badge::before {
+            width: 24px;
+            height: 2px;
+        }
+
+        .objective-card-badge::after {
+            width: 2px;
+            height: 24px;
+        }
+
+        .objective-card-badge.education::before {
+            width: 28px;
+            height: 16px;
+            background: none;
+            border: 2px solid var(--fg);
+            transform: skewX(-18deg) translateY(-2px);
+        }
+
+        .objective-card-badge.education::after {
+            width: 18px;
+            height: 2px;
+            transform: translateY(14px);
+        }
+
+        .objective-card-badge.networking::before {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--fg);
+            box-shadow: -14px 10px 0 var(--fg), 14px 10px 0 var(--fg);
+        }
+
+        .objective-card-badge.networking::after {
+            width: 28px;
+            height: 16px;
+            background: none;
+            border: 2px solid var(--fg);
+            border-top: none;
+            transform: translateY(10px);
+        }
+
+        .objective-card-badge.growth::before {
+            width: 24px;
+            height: 24px;
+            background: none;
+            border-top: 2px solid var(--fg);
+            border-right: 2px solid var(--fg);
+            transform: rotate(45deg) translate(-2px, 2px);
+        }
+
+        .objective-card-badge.growth::after {
+            width: 2px;
+            height: 26px;
+            transform: rotate(45deg) translate(5px, -5px);
+        }
+
+        .objective-card-badge.community {
+            border-radius: 999px;
+        }
+
+        .objective-card-badge.community::before,
+        .objective-card-badge.community::after {
+            width: 16px;
+            height: 24px;
+            border-radius: 16px 16px 0 0;
+            background: none;
+            border: 2px solid var(--fg);
+            border-bottom: none;
+            top: 18px;
+        }
+
+        .objective-card-badge.community::before {
+            left: 16px;
+            transform: rotate(-40deg);
+        }
+
+        .objective-card-badge.community::after {
+            right: 16px;
+            transform: rotate(40deg);
+        }
+
+        .objective-card-title {
+            font-size: 1.5rem;
+            font-weight: 900;
+            line-height: 0.96;
+            letter-spacing: -0.035em;
+            text-transform: uppercase;
+        }
+
+        .objective-card-copy {
+            font-size: 1.05rem;
+            line-height: 1.38;
+            color: rgba(243, 243, 225, 0.84);
+            text-wrap: balance;
+        }
+
+        .objective-card-rule {
+            align-self: end;
+            width: 72px;
+            height: 5px;
+            background: var(--blue);
+            box-shadow: 0 0 0 1px rgba(243, 243, 225, 0.18);
         }
 
         .hero-title-reveal {
@@ -822,14 +1280,374 @@
             vector-effect: non-scaling-stroke;
         }
 
+        .hero-ps1 {
+            position: relative;
+            overflow: hidden;
+            isolation: isolate;
+            min-height: clamp(680px, 86vh, 920px);
+            background:
+                radial-gradient(circle at 50% 36%, rgba(28, 0, 255, 0.2), transparent 26%),
+                linear-gradient(180deg, rgba(243, 243, 225, 0.04), transparent 34%),
+                var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-top: 3rem !important;
+            padding-bottom: 3rem !important;
+        }
+
+        .hero-ps1-scene {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        #egda-hero-blast-root {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            pointer-events: auto;
+        }
+
+        #egda-hero-cursor-root {
+            position: absolute;
+            inset: 0;
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        @media (hover: hover) and (pointer: fine) {
+            .hero-ps1,
+            .hero-ps1 a,
+            .hero-ps1 button {
+                cursor: none;
+            }
+        }
+
+        .hero-ps1-wave-grid,
+        .hero-ps1-wave-grid path,
+        .hero-ps1-canvas,
+        .hero-ps1-objects,
+        .hero-ps1-scanlines,
+        .hero-ps1-grid {
+            display: none;
+        }
+
+        .hero-ps1-layout {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            min-height: inherit;
+        }
+
+        .hero-ps1-copy {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.1rem;
+            text-align: center;
+            transform: translateY(-2vh);
+        }
+
+        .hero-ps1-title {
+            max-width: none;
+            margin: 0;
+            font-size: clamp(2.8rem, 5.5vw, 5.2rem);
+            font-weight: 900;
+            line-height: 0.95;
+            letter-spacing: -0.05em;
+            text-transform: uppercase;
+            color: var(--fg);
+        }
+
+        .hero-ps1-title-line {
+            display: block;
+            white-space: nowrap;
+        }
+
+        .hero-ps1-title-decrypt {
+            display: inline-block;
+            min-height: 1em;
+        }
+
+        .hero-ps1-title-placeholder {
+            visibility: hidden;
+        }
+
+        .hero-ps1-title-encrypted {
+            color: rgba(243, 243, 225, 0.38);
+        }
+
+        .hero-ps1-title-revealed {
+            color: var(--fg);
+        }
+
+        .hero-ps1-title .accent-outline {
+            -webkit-text-stroke-width: 1px;
+        }
+
+        .hero-ps1-copy p {
+            max-width: 24rem;
+            margin: 0;
+            font-size: clamp(0.98rem, 1.25vw, 1.06rem);
+            font-weight: 500;
+            line-height: 1.22;
+            color: rgba(243, 243, 225, 0.84);
+        }
+
+        .hero-ps1-actions {
+            display: flex;
+            justify-content: center;
+            gap: 0.9rem;
+            flex-wrap: wrap;
+        }
+
+        .hero-ps1-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 7;
+            overflow: hidden;
+            min-height: 58px;
+            min-width: 190px;
+            padding: 1rem 1.6rem;
+            border: 2px solid var(--fg);
+            background: rgba(10, 10, 10, 0.88);
+            color: var(--fg);
+            font-family: var(--font-pixel);
+            font-size: 0.58rem;
+            line-height: 1.7;
+            text-transform: uppercase;
+            box-shadow: 8px 8px 0 rgba(28, 0, 255, 0.28);
+            isolation: isolate;
+            transition: transform 120ms steps(2, end), background 120ms steps(2, end), color 120ms steps(2, end);
+        }
+
+        .hero-ps1-button::before {
+            content: "";
+            position: absolute;
+            inset: -2px;
+            z-index: 0;
+            pointer-events: none;
+            opacity: var(--blob-proximity, 0);
+            background:
+                radial-gradient(circle 50px at var(--blob-local-x, -999px) var(--blob-local-y, -999px),
+                    rgba(255, 255, 255, 1) 0 54%,
+                    rgba(255, 255, 255, 0.92) 54% 68%,
+                    rgba(255, 255, 255, 0) 68% 100%);
+            transition: opacity 60ms linear;
+        }
+
+        .hero-ps1-button-label {
+            position: relative;
+            z-index: 1;
+            color: #fff;
+            mix-blend-mode: difference;
+            pointer-events: none;
+        }
+
+        .hero-ps1-button.primary {
+            background: var(--blue);
+        }
+
+        .hero-ps1-button:hover,
+        .hero-ps1-button:focus-visible {
+            background: var(--fg);
+            color: var(--bg);
+            transform: translate(2px, 2px);
+            outline: none;
+        }
+
+        .hero-ps1-orbit {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 3;
+        }
+
+        .hero-ps1-orbit-card {
+            position: absolute;
+            width: 160px;
+            height: 100px;
+            border-radius: 12px;
+            border: 2px solid var(--fg);
+            background: rgba(10, 10, 10, 0.92);
+            box-shadow: 10px 10px 0 rgba(28, 0, 255, 0.24);
+            overflow: hidden;
+            pointer-events: none;
+            margin-top: -50px;
+            margin-left: -80px;
+            animation: hero-orbit-float 6s ease-in-out infinite alternate;
+        }
+
+        .hero-ps1-orbit-card .orbit-placeholder {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            background:
+                linear-gradient(180deg, rgba(28, 0, 255, 0.16), transparent 28%),
+                linear-gradient(135deg, rgba(243, 243, 225, 0.06), rgba(28, 0, 255, 0.18) 60%, rgba(10, 10, 10, 0.96));
+            overflow: hidden;
+        }
+
+        .hero-ps1-orbit-card .orbit-placeholder::before,
+        .hero-ps1-orbit-card .orbit-placeholder::after {
+            content: '';
+            position: absolute;
+            inset: 14% 14% auto;
+            height: 2px;
+            background: rgba(243, 243, 225, 0.26);
+            box-shadow:
+                0 20px 0 rgba(243, 243, 225, 0.18),
+                0 40px 0 rgba(243, 243, 225, 0.16),
+                0 60px 0 rgba(243, 243, 225, 0.14);
+        }
+
+        .hero-ps1-orbit-card .orbit-placeholder::after {
+            inset: auto 18% 14%;
+            height: auto;
+            aspect-ratio: 1;
+            width: 28%;
+            border: 2px solid rgba(243, 243, 225, 0.28);
+            background: none;
+            box-shadow: none;
+            border-radius: 50%;
+        }
+
+        .hero-ps1-orbit-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(180deg, rgba(28, 0, 255, 0.24), transparent 38%),
+                repeating-linear-gradient(180deg, rgba(243, 243, 225, 0.06) 0 1px, transparent 1px 4px);
+        }
+
+        .hero-ps1-orbit-card .orbit-label {
+            position: absolute;
+            left: 0.55rem;
+            bottom: 0.55rem;
+            padding: 0.35rem 0.45rem;
+            background: rgba(10, 10, 10, 0.9);
+            border: 1px solid rgba(243, 243, 225, 0.4);
+            color: var(--fg);
+            font-family: var(--font-pixel);
+            font-size: 0.46rem;
+            line-height: 1.5;
+            text-transform: uppercase;
+            z-index: 2;
+        }
+
+        .hero-ps1-orbit-card.card-a { transform: translate(0px, -320px) rotate(-10deg); animation-duration: 6s; }
+        .hero-ps1-orbit-card.card-b { transform: translate(226px, -226px) rotate(15deg); animation-duration: 7s; animation-direction: alternate-reverse; }
+        .hero-ps1-orbit-card.card-c { transform: translate(320px, 0px) rotate(-5deg); animation-duration: 5s; }
+        .hero-ps1-orbit-card.card-d { transform: translate(226px, 226px) rotate(20deg); animation-duration: 8s; animation-direction: alternate-reverse; }
+        .hero-ps1-orbit-card.card-e { transform: translate(0px, 320px) rotate(-15deg); animation-duration: 6s; }
+        .hero-ps1-orbit-card.card-f { transform: translate(-226px, 226px) rotate(10deg); animation-duration: 7s; animation-direction: alternate-reverse; }
+        .hero-ps1-orbit-card.card-g { transform: translate(-320px, 0px) rotate(-20deg); animation-duration: 5s; }
+        .hero-ps1-orbit-card.card-h { transform: translate(-226px, -226px) rotate(5deg); animation-duration: 8s; animation-direction: alternate-reverse; }
+
+        @keyframes hero-orbit-float {
+            0% { margin-top: -50px; }
+            100% { margin-top: -65px; }
+        }
+
+        @media (max-width: 1024px) {
+            .hero-ps1 {
+                min-height: 760px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .hero-ps1 {
+                min-height: 620px;
+                padding-top: 1.2rem !important;
+                padding-bottom: 1.2rem !important;
+            }
+
+            .hero-ps1-title {
+                max-width: none;
+                font-size: clamp(1.8rem, 7vw, 2.8rem);
+                line-height: 0.95;
+            }
+
+            .hero-ps1-button {
+                min-width: 152px;
+                min-height: 48px;
+                padding: 0.82rem 1rem;
+                font-size: 0.48rem;
+            }
+
+            .hero-ps1-orbit {
+                transform: translate(-50%, -50%) scale(0.45);
+            }
+        }
+
     </style>
 </head>
-<body vid="10">
+<body class="is-loading" vid="10">
 
-    
-    <canvas id="glcanvas" vid="11"></canvas>
+    <svg width="0" height="0" style="position:absolute; z-index:-1;" aria-hidden="true">
+        <defs>
+            <filter id="site-loader-warp-filter" x="-20%" y="-20%" width="140%" height="140%">
+                <feTurbulence type="fractalNoise" baseFrequency="0.005" numOctaves="3" result="noise">
+                    <animate attributeName="baseFrequency" values="0.004;0.006;0.004" dur="10s" repeatCount="indefinite"></animate>
+                </feTurbulence>
+                <feDisplacementMap in="SourceGraphic" in2="noise" scale="120" xChannelSelector="R" yChannelSelector="G"></feDisplacementMap>
+            </filter>
+        </defs>
+    </svg>
 
-    
+    <div class="site-loader" id="site-loader" aria-hidden="true">
+
+        <div class="site-loader-grid"></div>
+        <div class="site-loader-particles" aria-hidden="true">
+            <div class="site-loader-particle"></div>
+            <div class="site-loader-particle"></div>
+            <div class="site-loader-particle"></div>
+            <div class="site-loader-particle"></div>
+            <div class="site-loader-particle"></div>
+            <div class="site-loader-particle"></div>
+            <div class="site-loader-particle"></div>
+            <div class="site-loader-particle"></div>
+            <div class="site-loader-particle"></div>
+            <div class="site-loader-particle"></div>
+        </div>
+        <div class="site-loader-scanlines"></div>
+
+        <div class="site-loader-shell">
+            <div class="site-loader-core" aria-hidden="true">
+                <div class="site-loader-blob"></div>
+                <div class="site-loader-blob"></div>
+                <div class="site-loader-blob"></div>
+            </div>
+            <div class="site-loader-copy">
+                <h2 class="site-loader-title" id="site-loader-title">Loading<span class="site-loader-ellipsis"></span></h2>
+                <div class="site-loader-status" id="site-loader-status">Connecting the scene</div>
+            </div>
+            <div class="site-loader-progress" style="--progress: 0">
+                <div class="site-loader-progress-bar">
+                    <div class="site-loader-progress-fill"></div>
+                </div>
+                <div class="site-loader-progress-meta">
+                    <span id="site-loader-percent">0%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="relative z-10 w-screen min-h-screen flex flex-col items-stretch justify-start pointer-events-none" vid="12">
         
         
@@ -838,22 +1656,15 @@
             
             <header class="sticky top-0 z-50 solid-bg brutalist-border-b" vid="14">
                 
-                <div class="marquee-container text-[0.65rem] font-bold uppercase tracking-widest" vid="15">
-                    <div class="marquee-content" vid="16">
-                        EGDA MEMBERSHIP IS OPEN | SUPPORTING ESTONIAN GAME DEVELOPMENT | JOIN THE COMMUNITY | EGDA MEMBERSHIP IS OPEN | SUPPORTING ESTONIAN GAME DEVELOPMENT | JOIN THE COMMUNITY | EGDA MEMBERSHIP IS OPEN | SUPPORTING ESTONIAN GAME DEVELOPMENT | JOIN THE COMMUNITY |
-                    </div>
-                </div>
-
-                
                 <div class="grid grid-cols-12 relative" vid="17">
                     
                     <div class="col-span-12 md:col-span-3 brutalist-border-r flex items-center justify-center p-4 interactive-cell" onclick="window.scrollTo(0,0)" vid="18">
-                        <span class="text-4xl font-black uppercase tracking-tighter leading-none" vid="19">EGDA.</span>
+                        <img src="/EGDA%20logo%201%20%5BVectorized%5D.png" alt="EGDA" class="h-14 md:h-16 w-auto object-contain scale-[1.45] transform-gpu" vid="19">
                     </div>
                     
                     
                     <div class="col-span-12 md:col-span-6 brutalist-border-r flex items-center p-4 px-6 hidden md:flex" vid="20">
-                        <span class="text-sm font-medium uppercase tracking-tight" vid="21">Estonian Game Developers Association</span>
+                        <span class="text-sm font-medium uppercase tracking-tight" vid="21">Estonian Game Developers Association · Eesti Mänguarendajate Liit</span>
                     </div>
                     
                     
@@ -876,70 +1687,116 @@
             </header>
 
             
-            <section class="hero-mission relative brutalist-border-b glass-bg p-8 md:p-16 lg:p-24 flex flex-col justify-center" vid="31">
+            <section class="hero-mission hero-ps1 relative brutalist-border-b p-8 md:p-16 lg:p-24 flex flex-col justify-center" vid="31">
                 <div class="label-badge" vid="32">Mission</div>
-                
-                <div class="hero-copy">
-                    <h1 class="hero-title-reveal text-5xl md:text-7xl lg:text-8xl font-black uppercase tracking-tighter leading-[0.9] max-w-6xl mb-8" vid="33">
-                        Strengthen the <br vid="34">growth of game <br vid="35">development in <span class="accent-outline">Estonia.</span>
-                    </h1>
+
+                <div class="hero-ps1-scene" aria-hidden="true">
+                    <div id="egda-hero-blast-root"></div>
+                </div>
+                <div id="egda-hero-cursor-root" aria-hidden="true"></div>
+
+                <div class="hero-ps1-orbit" aria-hidden="true">
+                    <figure class="hero-ps1-orbit-card card-a">
+                        <div class="orbit-placeholder" aria-hidden="true"></div>
+                        <span class="orbit-label">community</span>
+                    </figure>
+                    <figure class="hero-ps1-orbit-card card-b">
+                        <div class="orbit-placeholder" aria-hidden="true"></div>
+                        <span class="orbit-label">board</span>
+                    </figure>
+                    <figure class="hero-ps1-orbit-card card-c">
+                        <div class="orbit-placeholder" aria-hidden="true"></div>
+                        <span class="orbit-label">events</span>
+                    </figure>
+                    <figure class="hero-ps1-orbit-card card-d">
+                        <div class="orbit-placeholder" aria-hidden="true"></div>
+                        <span class="orbit-label">people</span>
+                    </figure>
+                    <figure class="hero-ps1-orbit-card card-e">
+                        <div class="orbit-placeholder" aria-hidden="true"></div>
+                        <span class="orbit-label">membership</span>
+                    </figure>
+                    <figure class="hero-ps1-orbit-card card-f">
+                        <div class="orbit-placeholder" aria-hidden="true"></div>
+                        <span class="orbit-label">studios</span>
+                    </figure>
+                    <figure class="hero-ps1-orbit-card card-g">
+                        <div class="orbit-placeholder" aria-hidden="true"></div>
+                        <span class="orbit-label">network</span>
+                    </figure>
+                    <figure class="hero-ps1-orbit-card card-h">
+                        <div class="orbit-placeholder" aria-hidden="true"></div>
+                        <span class="orbit-label">support</span>
+                    </figure>
                 </div>
 
-                <div class="hero-constellation" aria-hidden="true">
-                    <svg class="hero-constellation-links" aria-hidden="true">
-                        <line class="hero-constellation-line" data-from="core" data-to="studios"></line>
-                        <line class="hero-constellation-line primary" data-from="core" data-to="talent"></line>
-                        <line class="hero-constellation-line" data-from="core" data-to="education"></line>
-                        <line class="hero-constellation-line" data-from="core" data-to="partners"></line>
-                        <line class="hero-constellation-line" data-from="studios" data-to="talent"></line>
-                        <line class="hero-constellation-line" data-from="education" data-to="partners"></line>
-
-                        <line class="hero-constellation-flow outward" data-from="core" data-to="studios"></line>
-                        <line class="hero-constellation-flow outward" data-from="core" data-to="talent"></line>
-                        <line class="hero-constellation-flow outward" data-from="core" data-to="education"></line>
-                        <line class="hero-constellation-flow outward" data-from="core" data-to="partners"></line>
-
-                        <line class="hero-constellation-flow inward" data-from="studios" data-to="core"></line>
-                        <line class="hero-constellation-flow inward" data-from="talent" data-to="core"></line>
-                        <line class="hero-constellation-flow inward" data-from="education" data-to="core"></line>
-                        <line class="hero-constellation-flow inward" data-from="partners" data-to="core"></line>
-                    </svg>
-
-                    <div class="hero-constellation-core" data-constellation-node="core">EGDA</div>
-                    <div class="hero-constellation-role studios" data-constellation-node="studios">Studios</div>
-                    <div class="hero-constellation-role talent" data-constellation-node="talent">Talent</div>
-                    <div class="hero-constellation-role education" data-constellation-node="education">Education</div>
-                    <div class="hero-constellation-role partners" data-constellation-node="partners">Partners</div>
-                    <span class="hero-constellation-satellite satellite-a"></span>
-                    <span class="hero-constellation-satellite satellite-b"></span>
-                    <span class="hero-constellation-satellite satellite-c"></span>
-                    <span class="hero-constellation-satellite satellite-d"></span>
-                </div>
-                
-                <div class="hero-copy max-w-4xl" vid="36">
-                    <p class="text-xl md:text-2xl font-light uppercase tracking-tight leading-snug" vid="37">
-                        <span class="font-bold" vid="38">EGDA</span> is a new non-profit organisation representing and supporting Estonia’s video game industry. We exist to bring together people and organisations working in and around games.
-                    </p>
+                <div class="hero-ps1-layout">
+                    <div class="hero-ps1-copy">
+                        <div id="egda-hero-title-root"></div>
+                        <div class="hero-ps1-actions">
+                            <a class="hero-ps1-button primary" href="#application"><span class="hero-ps1-button-label">Open membership</span></a>
+                            <a class="hero-ps1-button" href="mailto:info.egda@gmail.com"><span class="hero-ps1-button-label">Contact EGDA</span></a>
+                        </div>
+                    </div>
                 </div>
             </section>
 
             
-            <section class="grid grid-cols-1 lg:grid-cols-2 brutalist-border-b solid-bg" vid="39">
+            <section class="relative brutalist-border-b solid-bg" vid="39">
                 
-                
-                <div class="relative p-8 md:p-12 brutalist-border-r accent-panel" vid="40">
+                <div class="relative p-8 md:p-12 accent-panel" vid="40">
                     <div class="label-badge" vid="41">Main Goals</div>
                     <div class="text-sm font-light italic uppercase stage-title mb-6 text-[#F3F3E1]/70" vid="42">Objectives</div>
                     
-                    <div class="space-y-6 text-lg md:text-xl font-medium tracking-tight" vid="43">
-                        <p vid="44">The main goal of the website is to explain what EGDA is, why it exists and how people can get involved.</p>
-                        <p vid="45">We build trust, improve the reputation of game development in Estonia and make the local game development community easier to find, join and support.</p>
-                        <p vid="46">We do this by connecting people, sharing opportunities, supporting talent development, improving industry visibility and encouraging collaboration between the games industry, education, culture and the public sector.</p>
+                    <div class="objectives-showcase" vid="43">
+                        <div class="objectives-showcase-header">
+                            <div class="objectives-kicker">What We Do</div>
+                            <h2 class="objectives-heading">Building a better future for games</h2>
+                        </div>
+
+                        <div class="objectives-card-row">
+                            <article class="objective-card">
+                                <div class="objective-card-badge"></div>
+                                <h3 class="objective-card-title">Advocacy</h3>
+                                <p class="objective-card-copy">We represent the interests of game developers and improve the visibility and reputation of the industry in Estonia.</p>
+                                <div class="objective-card-rule" aria-hidden="true"></div>
+                            </article>
+
+                            <article class="objective-card">
+                                <div class="objective-card-badge education"></div>
+                                <h3 class="objective-card-title">Education</h3>
+                                <p class="objective-card-copy">We share knowledge, support talent development and create space for workshops, talks and professional growth.</p>
+                                <div class="objective-card-rule" aria-hidden="true"></div>
+                            </article>
+
+                            <article class="objective-card">
+                                <div class="objective-card-badge networking"></div>
+                                <h3 class="objective-card-title">Networking</h3>
+                                <p class="objective-card-copy">We connect developers, studios and partners through events, introductions and community activity.</p>
+                                <div class="objective-card-rule" aria-hidden="true"></div>
+                            </article>
+
+                            <article class="objective-card">
+                                <div class="objective-card-badge growth"></div>
+                                <h3 class="objective-card-title">Industry Growth</h3>
+                                <p class="objective-card-copy">We support a sustainable and competitive games industry by making the local ecosystem easier to find, join and support.</p>
+                                <div class="objective-card-rule" aria-hidden="true"></div>
+                            </article>
+
+                            <article class="objective-card">
+                                <div class="objective-card-badge community"></div>
+                                <h3 class="objective-card-title">Community</h3>
+                                <p class="objective-card-copy">We foster an open, inclusive and supportive network for everyone contributing to game development in Estonia.</p>
+                                <div class="objective-card-rule" aria-hidden="true"></div>
+                            </article>
+                        </div>
                     </div>
                 </div>
+            </section>
 
-                
-                <div class="relative p-8 md:p-12 flex flex-col accent-panel" vid="47">
+            
+            <section class="relative brutalist-border-b solid-bg" vid="47">
+                <div class="relative p-8 md:p-12 flex flex-col accent-panel" vid="48">
                     <div class="label-badge" vid="48">Community</div>
                     <div class="text-sm font-light italic uppercase stage-title mb-6 text-[#F3F3E1]/70" vid="49">Representing</div>
                     
@@ -960,11 +1817,10 @@
                         </div>
                     </div>
                 </div>
-
             </section>
 
             
-            <section class="relative brutalist-border-b solid-bg flex flex-col" vid="72">
+            <section id="membership" class="relative brutalist-border-b solid-bg flex flex-col" vid="72">
                 <div class="label-badge" vid="73">Membership</div>
 
                 <div class="p-8 md:p-12 lg:p-16 brutalist-border-b membership-intro accent-panel" vid="246">
@@ -1006,7 +1862,7 @@
                     </div>
 
                     
-                    <div class="col-span-1 lg:col-span-2 p-8 md:p-12 apply-lanyard-panel flex flex-col items-center justify-center text-center group relative overflow-hidden" vid="99">
+                    <div id="application" class="col-span-1 lg:col-span-2 p-8 md:p-12 apply-lanyard-panel flex flex-col items-center justify-center text-center group relative overflow-hidden" vid="99">
                         <div id="egda-lanyard-root" aria-hidden="true"></div>
                         <div class="apply-hint" aria-hidden="true">
                             <span>Click to apply</span>
@@ -1314,180 +2170,71 @@
     </script>
 
     
-    <script vid="147">
-        const canvas = document.getElementById('glcanvas');
-        const gl = canvas.getContext('webgl');
-
-        if (!gl) {
-            console.error('WebGL not supported');
-        }
-
-        const vsSource = `
-            attribute vec4 aVertexPosition;
-            void main() {
-                gl_Position = aVertexPosition;
-            }
-        `;
-
-        const fsSource = `
-            precision highp float;
-            
-            uniform vec2 u_resolution;
-            uniform float u_time;
-            uniform vec2 u_scroll;
-
-            const vec3 COLOR_BG = vec3(0.082, 0.082, 0.086);
-            const vec3 COLOR_BLOB = vec3(0.11, 0.0, 1.0);
-            const vec3 COLOR_FIG = vec3(0.953, 0.953, 0.882);
-
-            float random(vec2 st) {
-                return fract(sin(dot(st.xy, vec2(12.9898,78.233))) * 43758.5453123);
+    <script>
+        (() => {
+            const loader = document.getElementById('site-loader');
+            if (!loader) {
+                return;
             }
 
-            float noise(in vec2 st) {
-                vec2 i = floor(st);
-                vec2 f = fract(st);
-                float a = random(i);
-                float b = random(i + vec2(1.0, 0.0));
-                float c = random(i + vec2(0.0, 1.0));
-                float d = random(i + vec2(1.0, 1.0));
-                vec2 u = f * f * (3.0 - 2.0 * f);
-                return mix(a, b, u.x) + (c - a)* u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
-            }
+            const title = document.getElementById('site-loader-title');
+            const status = document.getElementById('site-loader-status');
+            const percent = document.getElementById('site-loader-percent');
+            const progressHost = loader.querySelector('.site-loader-progress');
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+            const phases = [
+                { title: 'Loading', status: 'Connecting the scene' },
+                { title: 'Loading', status: 'Linking studios' },
+                { title: 'Loading', status: 'Loading members' },
+                { title: 'Loading', status: 'Preparing the front page' }
+            ];
 
-            float fbm(in vec2 st) {
-                float v = 0.0;
-                float a = 0.5;
-                vec2 shift = vec2(100.0);
-                mat2 rot = mat2(cos(0.5), sin(0.5), -sin(0.5), cos(0.50));
-                for (int i = 0; i < 5; ++i) {
-                    v += a * noise(st);
-                    st = rot * st * 2.0 + shift;
-                    a *= 0.5;
+            const duration = prefersReducedMotion.matches ? 160 : 1500;
+            const holdAfterComplete = prefersReducedMotion.matches ? 40 : 180;
+            const start = performance.now();
+            let hidden = false;
+
+            const hideLoader = () => {
+                if (hidden) {
+                    return;
                 }
-                return v;
-            }
+                hidden = true;
+                loader.classList.add('is-hidden');
+                document.body.classList.remove('is-loading');
+                window.setTimeout(() => {
+                    loader.remove();
+                }, 520);
+            };
 
-            void main() {
-                vec2 st = gl_FragCoord.xy / u_resolution.xy;
-                st.x *= u_resolution.x / u_resolution.y;
+            const update = (now) => {
+                const elapsed = now - start;
+                const ratio = Math.max(0, Math.min(1, elapsed / duration));
+                const value = Math.round(ratio * 100);
+                const phaseIndex = Math.min(phases.length - 1, Math.floor(ratio * phases.length));
+                const currentPhase = phases[phaseIndex];
 
-                vec2 blob_uv = st + vec2(sin(u_time*0.1)*0.2, cos(u_time*0.15)*0.2);
-                blob_uv += u_scroll * 0.2;
-                
-                float shape_val = fbm(blob_uv * 1.5 - u_time * 0.03);
-                
-                vec2 center = vec2(0.6 * (u_resolution.x/u_resolution.y), 0.4);
-                float dist = distance(st, center + vec2(sin(u_time*0.2)*0.3, cos(u_time*0.1)*0.2));
-                
-                float blob_field = (shape_val * 1.5) - (dist * 1.0);
-
-                float dither_val = random(gl_FragCoord.xy * 0.1 + u_time * 0.01); 
-                
-                float is_blob = step(0.1 + dither_val*0.4, blob_field);
-
-                float fig_field = fbm(st * 3.0 + u_time * 0.1);
-                float fig_mask = step(0.8 + dither_val*0.2, fig_field) * step(0.4, dist); 
-
-                vec3 final_color = COLOR_BG;
-                
-                if (is_blob > 0.5) {
-                    float internal_grain = random(gl_FragCoord.xy * 0.5);
-                    final_color = mix(COLOR_BLOB * 0.8, COLOR_BLOB, internal_grain);
+                progressHost?.style.setProperty('--progress', value);
+                if (percent) {
+                    percent.textContent = `${value}%`;
                 }
-                
-                if (fig_mask > 0.5) {
-                    final_color = mix(final_color, COLOR_FIG, 0.7); 
+                if (title) {
+                    title.innerHTML = `${currentPhase.title}<span class="site-loader-ellipsis"></span>`;
+                }
+                if (status) {
+                    status.textContent = currentPhase.status;
                 }
 
-                gl_FragColor = vec4(final_color, 1.0);
-            }
-        `;
+                if (ratio < 1) {
+                    window.requestAnimationFrame(update);
+                    return;
+                }
 
-        function createShader(gl, type, source) {
-            const shader = gl.createShader(type);
-            gl.shaderSource(shader, source);
-            gl.compileShader(shader);
-            if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-                console.error('Shader compile error:', gl.getShaderInfoLog(shader));
-                gl.deleteShader(shader);
-                return null;
-            }
-            return shader;
-        }
+                window.setTimeout(hideLoader, holdAfterComplete);
+            };
 
-        const vertexShader = createShader(gl, gl.VERTEX_SHADER, vsSource);
-        const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fsSource);
-
-        const shaderProgram = gl.createProgram();
-        gl.attachShader(shaderProgram, vertexShader);
-        gl.attachShader(shaderProgram, fragmentShader);
-        gl.linkProgram(shaderProgram);
-
-        if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
-            console.error('Program link error:', gl.getProgramInfoLog(shaderProgram));
-        }
-
-        const programInfo = {
-            program: shaderProgram,
-            attribLocations: {
-                vertexPosition: gl.getAttribLocation(shaderProgram, 'aVertexPosition'),
-            },
-            uniformLocations: {
-                resolution: gl.getUniformLocation(shaderProgram, 'u_resolution'),
-                time: gl.getUniformLocation(shaderProgram, 'u_time'),
-                scroll: gl.getUniformLocation(shaderProgram, 'u_scroll'),
-            },
-        };
-
-        const positions = [
-            -1.0,  1.0,
-             1.0,  1.0,
-            -1.0, -1.0,
-             1.0, -1.0,
-        ];
-
-        const positionBuffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
-
-        let scrollY = 0;
-        window.addEventListener('scroll', () => {
-            scrollY = window.scrollY / window.innerHeight;
-        });
-
-        function resizeCanvasToDisplaySize(canvas) {
-            const displayWidth  = window.innerWidth;
-            const displayHeight = window.innerHeight;
-
-            if (canvas.width !== displayWidth || canvas.height !== displayHeight) {
-                canvas.width  = displayWidth;
-                canvas.height = displayHeight;
-                gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-            }
-        }
-
-        let startTime = Date.now();
-
-        function render() {
-            resizeCanvasToDisplaySize(gl.canvas);
-
-            gl.useProgram(programInfo.program);
-
-            gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-            gl.vertexAttribPointer(programInfo.attribLocations.vertexPosition, 2, gl.FLOAT, false, 0, 0);
-            gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
-
-            gl.uniform2f(programInfo.uniformLocations.resolution, gl.canvas.width, gl.canvas.height);
-            gl.uniform1f(programInfo.uniformLocations.time, (Date.now() - startTime) * 0.001);
-            gl.uniform2f(programInfo.uniformLocations.scroll, 0.0, scrollY);
-
-            gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-
-            requestAnimationFrame(render);
-        }
-
-        requestAnimationFrame(render);
+            window.requestAnimationFrame(update);
+            window.setTimeout(hideLoader, 3200);
+        })();
     </script>
 
 </body></html>

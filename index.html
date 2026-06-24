@@ -330,6 +330,8 @@
 
         .stage-title {
             display: block;
+            position: relative;
+            overflow: hidden;
             color: var(--fg) !important;
             font-size: clamp(1.25rem, 2vw, 1.75rem) !important;
             font-style: normal !important;
@@ -592,7 +594,7 @@
             overflow: hidden;
             letter-spacing: 0;
             animation: hero-title-lock 1200ms steps(8, end) 120ms both;
-            will-change: clip-path, transform, text-shadow, filter;
+            will-change: clip-path, transform;
         }
 
         .hero-title-reveal::before,
@@ -1318,14 +1320,6 @@
             pointer-events: none;
         }
 
-        @media (hover: hover) and (pointer: fine) {
-            .hero-ps1,
-            .hero-ps1 a,
-            .hero-ps1 button {
-                cursor: none;
-            }
-        }
-
         .hero-ps1-wave-grid,
         .hero-ps1-wave-grid path,
         .hero-ps1-canvas,
@@ -1472,9 +1466,15 @@
             left: 50%;
             width: 0;
             height: 0;
-            transform: translate(-50%, -50%);
             pointer-events: none;
             z-index: 3;
+            animation: hero-orbit-rotate 80s linear infinite;
+            will-change: transform;
+        }
+
+        @keyframes hero-orbit-rotate {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
         }
 
         .hero-ps1-orbit-card {
@@ -1490,6 +1490,7 @@
             margin-top: -50px;
             margin-left: -80px;
             animation: hero-orbit-float 6s ease-in-out infinite alternate;
+            will-change: transform;
         }
 
         .hero-ps1-orbit-card .orbit-placeholder {
@@ -1550,14 +1551,24 @@
             z-index: 2;
         }
 
-        .hero-ps1-orbit-card.card-a { transform: translate(0px, -320px) rotate(-10deg); animation-duration: 6s; }
-        .hero-ps1-orbit-card.card-b { transform: translate(226px, -226px) rotate(15deg); animation-duration: 7s; animation-direction: alternate-reverse; }
-        .hero-ps1-orbit-card.card-c { transform: translate(320px, 0px) rotate(-5deg); animation-duration: 5s; }
-        .hero-ps1-orbit-card.card-d { transform: translate(226px, 226px) rotate(20deg); animation-duration: 8s; animation-direction: alternate-reverse; }
-        .hero-ps1-orbit-card.card-e { transform: translate(0px, 320px) rotate(-15deg); animation-duration: 6s; }
-        .hero-ps1-orbit-card.card-f { transform: translate(-226px, 226px) rotate(10deg); animation-duration: 7s; animation-direction: alternate-reverse; }
-        .hero-ps1-orbit-card.card-g { transform: translate(-320px, 0px) rotate(-20deg); animation-duration: 5s; }
-        .hero-ps1-orbit-card.card-h { transform: translate(-226px, -226px) rotate(5deg); animation-duration: 8s; animation-direction: alternate-reverse; }
+        .hero-ps1-orbit-card.card-a { animation: hero-orbit-float 6s ease-in-out infinite alternate, hero-orbit-upright-a 80s linear infinite; }
+        .hero-ps1-orbit-card.card-b { animation: hero-orbit-float 7s ease-in-out infinite alternate-reverse, hero-orbit-upright-b 80s linear infinite; }
+        .hero-ps1-orbit-card.card-c { animation: hero-orbit-float 5s ease-in-out infinite alternate, hero-orbit-upright-c 80s linear infinite; }
+        .hero-ps1-orbit-card.card-d { animation: hero-orbit-float 8s ease-in-out infinite alternate-reverse, hero-orbit-upright-d 80s linear infinite; }
+        .hero-ps1-orbit-card.card-e { animation: hero-orbit-float 6s ease-in-out infinite alternate, hero-orbit-upright-e 80s linear infinite; }
+        .hero-ps1-orbit-card.card-f { animation: hero-orbit-float 7s ease-in-out infinite alternate-reverse, hero-orbit-upright-f 80s linear infinite; }
+        .hero-ps1-orbit-card.card-g { animation: hero-orbit-float 5s ease-in-out infinite alternate, hero-orbit-upright-g 80s linear infinite; }
+        .hero-ps1-orbit-card.card-h { animation: hero-orbit-float 8s ease-in-out infinite alternate-reverse, hero-orbit-upright-h 80s linear infinite; }
+
+        /* Counter-rotate each card to cancel parent orbit rotation, preserving their original tilt */
+        @keyframes hero-orbit-upright-a { from { transform: translate(0px,   -320px) rotate(-10deg); } to { transform: translate(0px,   -320px) rotate(-370deg); } }
+        @keyframes hero-orbit-upright-b { from { transform: translate(226px, -226px) rotate(15deg);  } to { transform: translate(226px, -226px) rotate(-345deg); } }
+        @keyframes hero-orbit-upright-c { from { transform: translate(320px,   0px)  rotate(-5deg);  } to { transform: translate(320px,   0px)  rotate(-365deg); } }
+        @keyframes hero-orbit-upright-d { from { transform: translate(226px,  226px) rotate(20deg);  } to { transform: translate(226px,  226px) rotate(-340deg); } }
+        @keyframes hero-orbit-upright-e { from { transform: translate(0px,    320px) rotate(-15deg); } to { transform: translate(0px,    320px) rotate(-375deg); } }
+        @keyframes hero-orbit-upright-f { from { transform: translate(-226px, 226px) rotate(10deg);  } to { transform: translate(-226px, 226px) rotate(-350deg); } }
+        @keyframes hero-orbit-upright-g { from { transform: translate(-320px,  0px)  rotate(-20deg); } to { transform: translate(-320px,  0px)  rotate(-380deg); } }
+        @keyframes hero-orbit-upright-h { from { transform: translate(-226px,-226px) rotate(5deg);   } to { transform: translate(-226px,-226px) rotate(-355deg); } }
 
         @keyframes hero-orbit-float {
             0% { margin-top: -50px; }
@@ -1593,6 +1604,59 @@
             .hero-ps1-orbit {
                 transform: translate(-50%, -50%) scale(0.45);
             }
+        }
+
+        /* ── Muster pattern accent strip ── */
+        .muster-strip { overflow: hidden; }
+        .muster-strip::before {
+            content: '';
+            position: absolute;
+            top: -45px; left: 0; right: 0;
+            height: 90px;
+            background: url('/assets/musterfinal.png') repeat-x left top / auto 90px;
+            mix-blend-mode: screen;
+            opacity: 1;
+            pointer-events: none;
+            z-index: 15;
+        }
+
+        /* On accent-panel sections, pattern sits just above the blue line */
+        .accent-panel.muster-strip { overflow: visible; }
+        .accent-panel.muster-strip::before {
+            top: 5px;
+            height: 45px;
+            background-position: left bottom;
+        }
+
+        /* ── Stage-title periodic scan ── */
+        .stage-title::after {
+            content: '';
+            position: absolute;
+            inset: -2px 0;
+            background: linear-gradient(
+                90deg,
+                transparent 0%,
+                rgba(28, 0, 255, 0.78) 42%,
+                rgba(243, 243, 225, 0.72) 50%,
+                transparent 64%
+            );
+            mix-blend-mode: difference;
+            transform: translateX(-120%);
+            pointer-events: none;
+            animation: stage-title-scan 5s steps(9, end) 1s infinite;
+        }
+
+        @keyframes stage-title-scan {
+            0%       { transform: translateX(-120%); opacity: 0; }
+            4%       { opacity: 0.9; }
+            16%      { opacity: 0.9; }
+            20%      { transform: translateX(120%);  opacity: 0; }
+            21%, 100% { transform: translateX(-120%); opacity: 0; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .stage-title::after { animation: none; }
+            .muster-strip::before { display: none; }
         }
 
     </style>
@@ -1659,7 +1723,7 @@
                 <div class="grid grid-cols-12 relative" vid="17">
                     
                     <div class="col-span-12 md:col-span-3 brutalist-border-r flex items-center justify-center p-4 interactive-cell" onclick="window.scrollTo(0,0)" vid="18">
-                        <img src="/EGDA%20logo%201%20%5BVectorized%5D.png" alt="EGDA" class="h-14 md:h-16 w-auto object-contain scale-[1.45] transform-gpu" vid="19">
+                        <img src="/EDGA%20Logo%20Final.png" alt="EGDA" class="h-14 md:h-16 w-auto object-contain scale-[1.45] transform-gpu" vid="19">
                     </div>
                     
                     
@@ -1687,14 +1751,12 @@
             </header>
 
             
-            <section class="hero-mission hero-ps1 relative brutalist-border-b p-8 md:p-16 lg:p-24 flex flex-col justify-center" vid="31">
+            <section class="hero-mission hero-ps1 relative brutalist-border-b p-8 md:p-16 lg:p-24 flex flex-col justify-center muster-strip" vid="31">
                 <div class="label-badge" vid="32">Mission</div>
 
                 <div class="hero-ps1-scene" aria-hidden="true">
                     <div id="egda-hero-blast-root"></div>
                 </div>
-                <div id="egda-hero-cursor-root" aria-hidden="true"></div>
-
                 <div class="hero-ps1-orbit" aria-hidden="true">
                     <figure class="hero-ps1-orbit-card card-a">
                         <div class="orbit-placeholder" aria-hidden="true"></div>
@@ -1744,7 +1806,7 @@
             
             <section class="relative brutalist-border-b solid-bg" vid="39">
                 
-                <div class="relative p-8 md:p-12 accent-panel" vid="40">
+                <div class="relative p-8 md:p-12 accent-panel muster-strip" vid="40">
                     <div class="label-badge" vid="41">Main Goals</div>
                     <div class="text-sm font-light italic uppercase stage-title mb-6 text-[#F3F3E1]/70" vid="42">Objectives</div>
                     
@@ -1796,7 +1858,7 @@
 
             
             <section class="relative brutalist-border-b solid-bg" vid="47">
-                <div class="relative p-8 md:p-12 flex flex-col accent-panel" vid="48">
+                <div class="relative p-8 md:p-12 flex flex-col accent-panel muster-strip" vid="48">
                     <div class="label-badge" vid="48">Community</div>
                     <div class="text-sm font-light italic uppercase stage-title mb-6 text-[#F3F3E1]/70" vid="49">Representing</div>
                     
@@ -1823,7 +1885,7 @@
             <section id="membership" class="relative brutalist-border-b solid-bg flex flex-col" vid="72">
                 <div class="label-badge" vid="73">Membership</div>
 
-                <div class="p-8 md:p-12 lg:p-16 brutalist-border-b membership-intro accent-panel" vid="246">
+                <div class="relative p-8 md:p-12 lg:p-16 brutalist-border-b membership-intro accent-panel muster-strip" vid="246">
                     <div class="text-sm font-light italic uppercase stage-title mb-6 text-[#F3F3E1]/70" vid="247">Join EGDA</div>
                     <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12 items-end" vid="248">
                         <h2 class="lg:col-span-3 text-5xl md:text-7xl lg:text-8xl font-black uppercase tracking-tighter leading-[0.88]" vid="249">Want to become a <span class="accent-text">member?</span></h2>
@@ -1926,7 +1988,7 @@
             
             <section class="relative brutalist-border-b solid-bg" vid="200">
                 <div class="label-badge" vid="201">Board</div>
-                <div class="p-8 md:p-12 brutalist-border-b accent-panel" vid="202">
+                <div class="relative p-8 md:p-12 brutalist-border-b accent-panel muster-strip" vid="202">
                     <div class="text-sm font-light italic uppercase stage-title mb-6 text-[#F3F3E1]/70" vid="203">Current Board Members</div>
                     <h2 class="text-4xl md:text-6xl lg:text-7xl font-black uppercase tracking-tighter leading-[0.9] max-w-5xl" vid="204">People keeping <span class="accent-text">EGDA</span> moving.</h2>
                 </div>

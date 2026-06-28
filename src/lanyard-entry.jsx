@@ -19,7 +19,7 @@ if (heroBlastRoot) {
     <PixelBlast
       variant="circle"
       pixelSize={6}
-      color="#1C00FF"
+      color="#ffffff"
       patternScale={2.6}
       patternDensity={1.05}
       pixelSizeJitter={0.35}

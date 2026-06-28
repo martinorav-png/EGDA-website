@@ -1298,6 +1298,14 @@
             padding-bottom: 3rem !important;
         }
 
+        .hero-bg-image {
+            position: absolute;
+            inset: -20px;
+            background: url('/assets/taust.png') center center / cover no-repeat;
+            z-index: 0;
+            pointer-events: none;
+        }
+
         .hero-ps1-scene {
             position: absolute;
             inset: 0;
@@ -1659,6 +1667,133 @@
             .muster-strip::before { display: none; }
         }
 
+        .ticker-wrap {
+            overflow: hidden;
+            mask-image: linear-gradient(90deg, transparent 0%, #000 8%, #000 92%, transparent 100%);
+            -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 8%, #000 92%, transparent 100%);
+        }
+
+        .ticker-track {
+            display: flex;
+            width: max-content;
+            gap: 0;
+        }
+
+        .ticker-track.reverse {
+            animation-direction: reverse;
+        }
+
+        .ticker-run {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            animation: ticker-scroll 28s linear infinite;
+            white-space: nowrap;
+        }
+
+        .ticker-run.slow {
+            animation-duration: 38s;
+        }
+
+        .ticker-item {
+            font-size: clamp(1.6rem, 3.2vw, 3rem);
+            font-weight: 900;
+            line-height: 1;
+            letter-spacing: -0.04em;
+            text-transform: uppercase;
+            padding: 0 0.6em;
+            color: var(--fg);
+        }
+
+        .ticker-dot {
+            width: 10px;
+            height: 10px;
+            background: var(--blue);
+            transform: rotate(45deg);
+            flex-shrink: 0;
+            margin: 0 0.2em;
+        }
+
+        .ticker-track.reverse .ticker-item {
+            color: rgba(243, 243, 225, 0.5);
+        }
+
+        .ticker-track.reverse .ticker-dot {
+            background: rgba(243, 243, 225, 0.22);
+        }
+
+        @keyframes ticker-scroll {
+            from { transform: translateX(0); }
+            to   { transform: translateX(-50%); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .ticker-run { animation: none; }
+        }
+
+        .photo-strip {
+            overflow: hidden;
+            mask-image: linear-gradient(90deg, transparent 0%, #000 5%, #000 95%, transparent 100%);
+            -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 5%, #000 95%, transparent 100%);
+        }
+
+        .photo-strip-track {
+            display: flex;
+            gap: 0.75rem;
+            width: max-content;
+            animation: photo-strip-scroll 50s linear infinite;
+        }
+
+        .photo-strip:hover .photo-strip-track {
+            animation-play-state: paused;
+        }
+
+        .photo-strip-item {
+            height: 300px;
+            flex-shrink: 0;
+            border: 2px solid var(--fg);
+            overflow: hidden;
+            position: relative;
+            background: var(--blue-soft);
+        }
+
+        .photo-strip-item img {
+            height: 100%;
+            width: auto;
+            display: block;
+            object-fit: cover;
+            filter: grayscale(1) contrast(1.1);
+            transition: filter 160ms steps(4, end);
+        }
+
+        .photo-strip-item::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--blue);
+            mix-blend-mode: color;
+            opacity: 0.88;
+            pointer-events: none;
+            transition: opacity 160ms steps(4, end);
+        }
+
+        .photo-strip-item:hover img {
+            filter: none;
+        }
+
+        .photo-strip-item:hover::after {
+            opacity: 0;
+        }
+
+        @keyframes photo-strip-scroll {
+            from { transform: translateX(0); }
+            to   { transform: translateX(-50%); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .photo-strip-track { animation: none; }
+        }
+
     </style>
 </head>
 <body class="is-loading" vid="10">
@@ -1753,7 +1888,7 @@
             
             <section class="hero-mission hero-ps1 relative brutalist-border-b p-8 md:p-16 lg:p-24 flex flex-col justify-center muster-strip" vid="31">
                 <div class="label-badge" vid="32">Mission</div>
-
+                <div class="hero-bg-image" aria-hidden="true"></div>
                 <div class="hero-ps1-scene" aria-hidden="true">
                     <div id="egda-hero-blast-root"></div>
                 </div>
@@ -1812,43 +1947,42 @@
                     
                     <div class="objectives-showcase" vid="43">
                         <div class="objectives-showcase-header">
-                            <div class="objectives-kicker">What We Do</div>
-                            <h2 class="objectives-heading">Building a better future for games</h2>
+                            <h2 class="objectives-heading">What We Do</h2>
                         </div>
 
                         <div class="objectives-card-row">
                             <article class="objective-card">
                                 <div class="objective-card-badge"></div>
                                 <h3 class="objective-card-title">Advocacy</h3>
-                                <p class="objective-card-copy">We represent the interests of game developers and improve the visibility and reputation of the industry in Estonia.</p>
+                                <p class="objective-card-copy">We give game developers and studios a stronger voice while raising the visibility of Estonia's games industry.</p>
                                 <div class="objective-card-rule" aria-hidden="true"></div>
                             </article>
 
                             <article class="objective-card">
                                 <div class="objective-card-badge education"></div>
                                 <h3 class="objective-card-title">Education</h3>
-                                <p class="objective-card-copy">We share knowledge, support talent development and create space for workshops, talks and professional growth.</p>
+                                <p class="objective-card-copy">We support the next generation of game developers through workshops, talks, mentorship, and knowledge sharing.</p>
                                 <div class="objective-card-rule" aria-hidden="true"></div>
                             </article>
 
                             <article class="objective-card">
                                 <div class="objective-card-badge networking"></div>
                                 <h3 class="objective-card-title">Networking</h3>
-                                <p class="objective-card-copy">We connect developers, studios and partners through events, introductions and community activity.</p>
+                                <p class="objective-card-copy">We bring developers, studios, educators, and partners together through events, introductions, and collaboration.</p>
                                 <div class="objective-card-rule" aria-hidden="true"></div>
                             </article>
 
                             <article class="objective-card">
                                 <div class="objective-card-badge growth"></div>
                                 <h3 class="objective-card-title">Industry Growth</h3>
-                                <p class="objective-card-copy">We support a sustainable and competitive games industry by making the local ecosystem easier to find, join and support.</p>
+                                <p class="objective-card-copy">We support the growth of Estonia's game development ecosystem through collaboration, partnerships, and visibility.</p>
                                 <div class="objective-card-rule" aria-hidden="true"></div>
                             </article>
 
                             <article class="objective-card">
                                 <div class="objective-card-badge community"></div>
                                 <h3 class="objective-card-title">Community</h3>
-                                <p class="objective-card-copy">We foster an open, inclusive and supportive network for everyone contributing to game development in Estonia.</p>
+                                <p class="objective-card-copy">We bring the community together through events and an active Discord server, creating a space to connect, collaborate and share knowledge.</p>
                                 <div class="objective-card-rule" aria-hidden="true"></div>
                             </article>
                         </div>
@@ -1860,22 +1994,75 @@
             <section class="relative brutalist-border-b solid-bg" vid="47">
                 <div class="relative p-8 md:p-12 flex flex-col accent-panel muster-strip" vid="48">
                     <div class="label-badge" vid="48">Community</div>
-                    <div class="text-sm font-light italic uppercase stage-title mb-6 text-[#F3F3E1]/70" vid="49">Representing</div>
-                    
+                    <div class="text-sm font-light italic uppercase stage-title mb-6 text-[#F3F3E1]/70" vid="49">About EGDA</div>
+
                     <div class="mt-auto mb-auto" vid="50">
-                        <h2 class="text-2xl font-bold uppercase tracking-tight mb-8" vid="51">Everyone is welcome to apply and <span class="accent-text">contribute to the ecosystem.</span></h2>
-                        
-                        <div class="flex flex-wrap gap-y-4 gap-x-2 text-xl md:text-3xl font-black uppercase tracking-tighter leading-none" vid="52">
-                            <span vid="53">Developers</span> <span class="separator" vid="54">,</span>
-                            <span vid="55">Studios</span> <span class="separator" vid="56">,</span>
-                            <span vid="57">Students</span> <span class="separator" vid="58">,</span>
-                            <span vid="59">Educators</span> <span class="separator" vid="60">,</span>
-                            <span vid="61">Researchers</span> <span class="separator" vid="62">,</span>
-                            <span vid="63">Publishers</span> <span class="separator" vid="64">,</span>
-                            <span vid="65">Cultural Institutions</span> <span class="separator" vid="66">,</span>
-                            <span vid="67">Non-Profits</span> <span class="separator" vid="68">,</span>
-                            <span vid="69">Public Sector Partners</span> <span class="separator" vid="70">,</span>
-                            <span vid="71">Hobbyists</span>
+                        <h2 class="text-2xl font-bold uppercase tracking-tight mb-8" vid="51">EGDA works to strengthen and grow <span class="accent-text">Estonia's game development ecosystem.</span></h2>
+                        <p class="text-base md:text-lg font-light leading-relaxed text-[#F3F3E1]/80 mb-10 max-w-3xl">We connect developers, studios, educators, cultural institutions, and industry partners through events, collaboration, education, and advocacy. We support the next generation of game developers, build connections with partners in Estonia and abroad, and promote games as an important part of contemporary culture and the creative industries. Our goal is to build a strong, connected, and sustainable game development community in Estonia.</p>
+
+                        <div class="photo-strip -mx-8 md:-mx-12 mb-10">
+                            <div class="photo-strip-track">
+                                <div class="photo-strip-item"><img src="/assets/meetups/meetup-1.jpg" alt="EGDA meetup"></div>
+                                <div class="photo-strip-item"><img src="/assets/meetups/meetup-2.jpg" alt="EGDA meetup"></div>
+                                <div class="photo-strip-item"><img src="/assets/meetups/meetup-3.jpg" alt="EGDA meetup"></div>
+                                <div class="photo-strip-item"><img src="/assets/meetups/meetup-4.jpg" alt="EGDA meetup"></div>
+                                <div class="photo-strip-item"><img src="/assets/meetups/meetup-5.jpg" alt="EGDA meetup"></div>
+                                <div class="photo-strip-item"><img src="/assets/meetups/meetup-6.jpg" alt="EGDA meetup"></div>
+                                <div class="photo-strip-item"><img src="/assets/meetups/meetup-7.jpg" alt="EGDA meetup"></div>
+                                <div class="photo-strip-item"><img src="/assets/meetups/meetup-8.jpg" alt="EGDA meetup"></div>
+                                <div class="photo-strip-item"><img src="/assets/meetups/1780761942524.jpg" alt="EGDA meetup"></div>
+                                <div class="photo-strip-item"><img src="/assets/meetups/1780761942760.jpg" alt="EGDA meetup"></div>
+                                <div class="photo-strip-item"><img src="/assets/meetups/1780761943002.jpg" alt="EGDA meetup"></div>
+                                <!-- duplicate for seamless loop -->
+                                <div class="photo-strip-item"><img src="/assets/meetups/meetup-1.jpg" alt="EGDA meetup"></div>
+                                <div class="photo-strip-item"><img src="/assets/meetups/meetup-2.jpg" alt="EGDA meetup"></div>
+                                <div class="photo-strip-item"><img src="/assets/meetups/meetup-3.jpg" alt="EGDA meetup"></div>
+                                <div class="photo-strip-item"><img src="/assets/meetups/meetup-4.jpg" alt="EGDA meetup"></div>
+                                <div class="photo-strip-item"><img src="/assets/meetups/meetup-5.jpg" alt="EGDA meetup"></div>
+                                <div class="photo-strip-item"><img src="/assets/meetups/meetup-6.jpg" alt="EGDA meetup"></div>
+                                <div class="photo-strip-item"><img src="/assets/meetups/meetup-7.jpg" alt="EGDA meetup"></div>
+                                <div class="photo-strip-item"><img src="/assets/meetups/meetup-8.jpg" alt="EGDA meetup"></div>
+                                <div class="photo-strip-item"><img src="/assets/meetups/1780761942524.jpg" alt="EGDA meetup"></div>
+                                <div class="photo-strip-item"><img src="/assets/meetups/1780761942760.jpg" alt="EGDA meetup"></div>
+                                <div class="photo-strip-item"><img src="/assets/meetups/1780761943002.jpg" alt="EGDA meetup"></div>
+                            </div>
+                        </div>
+
+                        <div class="ticker-wrap flex flex-col gap-3 -mx-8 md:-mx-12">
+                            <!-- row 1: Developers → Researchers, scrolls left -->
+                            <div class="ticker-track">
+                                <div class="ticker-run" aria-hidden="true">
+                                    <span class="ticker-item">Developers</span><span class="ticker-dot"></span>
+                                    <span class="ticker-item">Studios</span><span class="ticker-dot"></span>
+                                    <span class="ticker-item">Students</span><span class="ticker-dot"></span>
+                                    <span class="ticker-item">Educators</span><span class="ticker-dot"></span>
+                                    <span class="ticker-item">Researchers</span><span class="ticker-dot"></span>
+                                </div>
+                                <div class="ticker-run" aria-hidden="true">
+                                    <span class="ticker-item">Developers</span><span class="ticker-dot"></span>
+                                    <span class="ticker-item">Studios</span><span class="ticker-dot"></span>
+                                    <span class="ticker-item">Students</span><span class="ticker-dot"></span>
+                                    <span class="ticker-item">Educators</span><span class="ticker-dot"></span>
+                                    <span class="ticker-item">Researchers</span><span class="ticker-dot"></span>
+                                </div>
+                            </div>
+                            <!-- row 2: Publishers → Hobbyists, scrolls right, dimmed -->
+                            <div class="ticker-track reverse">
+                                <div class="ticker-run slow" aria-hidden="true">
+                                    <span class="ticker-item">Publishers</span><span class="ticker-dot"></span>
+                                    <span class="ticker-item">Cultural Institutions</span><span class="ticker-dot"></span>
+                                    <span class="ticker-item">Non-Profits</span><span class="ticker-dot"></span>
+                                    <span class="ticker-item">Public Sector Partners</span><span class="ticker-dot"></span>
+                                    <span class="ticker-item">Hobbyists</span><span class="ticker-dot"></span>
+                                </div>
+                                <div class="ticker-run slow" aria-hidden="true">
+                                    <span class="ticker-item">Publishers</span><span class="ticker-dot"></span>
+                                    <span class="ticker-item">Cultural Institutions</span><span class="ticker-dot"></span>
+                                    <span class="ticker-item">Non-Profits</span><span class="ticker-dot"></span>
+                                    <span class="ticker-item">Public Sector Partners</span><span class="ticker-dot"></span>
+                                    <span class="ticker-item">Hobbyists</span><span class="ticker-dot"></span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1889,7 +2076,7 @@
                     <div class="text-sm font-light italic uppercase stage-title mb-6 text-[#F3F3E1]/70" vid="247">Join EGDA</div>
                     <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12 items-end" vid="248">
                         <h2 class="lg:col-span-3 text-5xl md:text-7xl lg:text-8xl font-black uppercase tracking-tighter leading-[0.88]" vid="249">Want to become a <span class="accent-text">member?</span></h2>
-                        <p class="lg:col-span-2 text-xl md:text-2xl font-light uppercase tracking-tight leading-snug" vid="250">Apply to join the association and help make Estonian game development easier to find, support and grow.</p>
+                        <p class="lg:col-span-2 text-xl md:text-2xl font-light uppercase tracking-tight leading-snug" vid="250">Whether you're a developer, studio, student, publisher, educator, hobbyist, or simply passionate about games, you're welcome to become part of the community. Together, we're building a stronger, more connected, and internationally recognised Estonian games industry.</p>
                     </div>
                 </div>
                 
@@ -1900,25 +2087,29 @@
                         <div class="text-base font-light italic uppercase stage-title mb-10 text-[#F3F3E1]/70" vid="76">Membership Benefits</div>
                         
                         <div class="space-y-8" vid="77">
-                            <div class="benefit-row flex items-start gap-5" vid="78">
-                                <svg class="w-7 h-7 mt-1 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" vid="79"><path stroke-linecap="square" stroke-linejoin="miter" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" vid="80"></path></svg>
-                                <p class="text-2xl md:text-3xl font-bold uppercase tracking-tight leading-tight" vid="81">Representation in Estonia’s game development community</p>
+                            <div class="benefit-row flex items-start gap-5">
+                                <svg class="w-7 h-7 mt-1 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-linejoin="miter" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"></path></svg>
+                                <p class="text-2xl md:text-3xl font-bold uppercase tracking-tight leading-tight">Represent the Estonian games industry and help shape its future</p>
                             </div>
-                            <div class="benefit-row flex items-start gap-5" vid="82">
-                                <svg class="w-7 h-7 mt-1 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" vid="83"><path stroke-linecap="square" stroke-linejoin="miter" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" vid="84"></path></svg>
-                                <p class="text-2xl md:text-3xl font-bold uppercase tracking-tight leading-tight" vid="85">Access to shared industry contacts and platforms <span class="font-light italic text-[#F3F3E1]/60" vid="86">(with consent)</span></p>
+                            <div class="benefit-row flex items-start gap-5">
+                                <svg class="w-7 h-7 mt-1 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-linejoin="miter" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"></path></svg>
+                                <p class="text-2xl md:text-3xl font-bold uppercase tracking-tight leading-tight">Connect with developers, studios, publishers, educators, and industry partners</p>
                             </div>
-                            <div class="benefit-row flex items-start gap-5" vid="87">
-                                <svg class="w-7 h-7 mt-1 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" vid="88"><path stroke-linecap="square" stroke-linejoin="miter" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" vid="89"></path></svg>
-                                <p class="text-2xl md:text-3xl font-bold uppercase tracking-tight leading-tight" vid="90">Participation in general meetings and voting</p>
+                            <div class="benefit-row flex items-start gap-5">
+                                <svg class="w-7 h-7 mt-1 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-linejoin="miter" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"></path></svg>
+                                <p class="text-2xl md:text-3xl font-bold uppercase tracking-tight leading-tight">Access shared industry contacts and opportunities <span class="font-light italic text-[#F3F3E1]/60">(with consent)</span></p>
                             </div>
-                            <div class="benefit-row flex items-start gap-5" vid="91">
-                                <svg class="w-7 h-7 mt-1 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" vid="92"><path stroke-linecap="square" stroke-linejoin="miter" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" vid="93"></path></svg>
-                                <p class="text-2xl md:text-3xl font-bold uppercase tracking-tight leading-tight" vid="94">Updates about EGDA activities and budget use</p>
+                            <div class="benefit-row flex items-start gap-5">
+                                <svg class="w-7 h-7 mt-1 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-linejoin="miter" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"></path></svg>
+                                <p class="text-2xl md:text-3xl font-bold uppercase tracking-tight leading-tight">Participate in general meetings and vote on key decisions</p>
                             </div>
-                            <div class="benefit-row flex items-start gap-5" vid="95">
-                                <svg class="w-7 h-7 mt-1 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" vid="96"><path stroke-linecap="square" stroke-linejoin="miter" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" vid="97"></path></svg>
-                                <p class="text-2xl md:text-3xl font-bold uppercase tracking-tight leading-tight" vid="98">Opportunity to help shape the future of game development in Estonia</p>
+                            <div class="benefit-row flex items-start gap-5">
+                                <svg class="w-7 h-7 mt-1 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-linejoin="miter" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"></path></svg>
+                                <p class="text-2xl md:text-3xl font-bold uppercase tracking-tight leading-tight">Stay informed about EGDA’s activities, projects, and initiatives</p>
+                            </div>
+                            <div class="benefit-row flex items-start gap-5">
+                                <svg class="w-7 h-7 mt-1 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-linejoin="miter" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"></path></svg>
+                                <p class="text-2xl md:text-3xl font-bold uppercase tracking-tight leading-tight">Be part of a growing community working to strengthen Estonian game development</p>
                             </div>
                         </div>
                     </div>
@@ -1985,7 +2176,31 @@
 
             </section>
 
-            
+
+            <section class="relative brutalist-border-b solid-bg">
+                <div class="relative p-8 md:p-12 accent-panel muster-strip">
+                    <div class="label-badge">Community</div>
+                    <div class="text-sm font-light italic uppercase stage-title mb-6 text-[#F3F3E1]/70">Join the Conversation</div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12 items-end mb-10">
+                        <h2 class="lg:col-span-3 text-4xl md:text-6xl lg:text-7xl font-black uppercase tracking-tighter leading-[0.9]">Join the <span class="accent-text">Conversation</span></h2>
+                        <p class="lg:col-span-2 text-lg md:text-xl font-light uppercase tracking-tight leading-snug text-[#F3F3E1]/80">Connect with developers, discover opportunities, and stay informed about what's happening in Estonia's games industry.</p>
+                    </div>
+
+                    <div class="flex flex-wrap gap-4">
+                        <a href="https://www.linkedin.com/company/estonian-game-developers-association/?viewAsMember=true" target="_blank" rel="noopener noreferrer" class="hero-ps1-button flex items-center gap-3">
+                            <svg class="w-5 h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                            <span class="hero-ps1-button-label">EGDA on LinkedIn</span>
+                        </a>
+                        <a href="https://discord.gg/mTkj64Aj4" target="_blank" rel="noopener noreferrer" class="hero-ps1-button flex items-center gap-3">
+                            <svg class="w-5 h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>
+                            <span class="hero-ps1-button-label">Join Discord</span>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+
             <section class="relative brutalist-border-b solid-bg" vid="200">
                 <div class="label-badge" vid="201">Board</div>
                 <div class="relative p-8 md:p-12 brutalist-border-b accent-panel muster-strip" vid="202">

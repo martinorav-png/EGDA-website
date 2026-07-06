@@ -2,7 +2,7 @@ backend:
   name: github
   repo: martinorav-png/EDGA-website
   branch: main
-  base_url: https://YOUR_VERCEL_URL
+  base_url: https://edga-website.vercel.app
   auth_endpoint: api/auth
 
 media_folder: public/assets/news-media

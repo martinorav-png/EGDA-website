@@ -2459,19 +2459,24 @@
 
     <script>
         document.querySelectorAll('.photo-strip').forEach(function(strip) {
-            var isDown = false, startX, scrollLeft;
+            var active = false, startX, startScroll;
             strip.addEventListener('mousedown', function(e) {
-                isDown = true;
-                startX = e.pageX - strip.offsetLeft;
-                scrollLeft = strip.scrollLeft;
+                active = true;
+                startX = e.clientX;
+                startScroll = strip.scrollLeft;
+                strip.style.userSelect = 'none';
+                strip.style.cursor = 'grabbing';
             });
-            strip.addEventListener('mouseleave', function() { isDown = false; });
-            strip.addEventListener('mouseup', function() { isDown = false; });
-            strip.addEventListener('mousemove', function(e) {
-                if (!isDown) return;
+            document.addEventListener('mousemove', function(e) {
+                if (!active) return;
                 e.preventDefault();
-                var x = e.pageX - strip.offsetLeft;
-                strip.scrollLeft = scrollLeft - (x - startX);
+                strip.scrollLeft = startScroll - (e.clientX - startX);
+            }, { passive: false });
+            document.addEventListener('mouseup', function() {
+                if (!active) return;
+                active = false;
+                strip.style.userSelect = '';
+                strip.style.cursor = '';
             });
         });
     </script>

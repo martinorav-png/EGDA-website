@@ -10,7 +10,7 @@ const heroTitleRoot = document.getElementById('egda-hero-title-root');
 
 if (rootElement) {
   createRoot(rootElement).render(
-    <Lanyard position={[0, 0, 18]} gravity={[0, -36, 0]} fov={18} />
+    <Lanyard position={[0, 0, 18]} gravity={[0, -36, 0]} fov={24} />
   );
 }
 

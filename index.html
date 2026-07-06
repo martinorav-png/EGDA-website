@@ -1,4 +1,4 @@
-<html lang="en" vid="0"><head vid="1">
+﻿<html lang="en" vid="0"><head vid="1">
     <meta charset="UTF-8" vid="2">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" vid="3">
     <title vid="4">EGDA Estonian Game Developers Association</title>
@@ -1732,20 +1732,21 @@
         }
 
         .photo-strip {
-            overflow: hidden;
-            mask-image: linear-gradient(90deg, transparent 0%, #000 5%, #000 95%, transparent 100%);
-            -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 5%, #000 95%, transparent 100%);
+            overflow-x: auto;
+            overflow-y: hidden;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            cursor: grab;
         }
+
+        .photo-strip::-webkit-scrollbar { display: none; }
+        .photo-strip:active { cursor: grabbing; }
 
         .photo-strip-track {
             display: flex;
             gap: 0.75rem;
             width: max-content;
-            animation: photo-strip-scroll 50s linear infinite;
-        }
-
-        .photo-strip:hover .photo-strip-track {
-            animation-play-state: paused;
+            padding-bottom: 4px;
         }
 
         .photo-strip-item {
@@ -1762,36 +1763,6 @@
             width: auto;
             display: block;
             object-fit: cover;
-            filter: grayscale(1) contrast(1.1);
-            transition: filter 160ms steps(4, end);
-        }
-
-        .photo-strip-item::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: var(--blue);
-            mix-blend-mode: color;
-            opacity: 0.88;
-            pointer-events: none;
-            transition: opacity 160ms steps(4, end);
-        }
-
-        .photo-strip-item:hover img {
-            filter: none;
-        }
-
-        .photo-strip-item:hover::after {
-            opacity: 0;
-        }
-
-        @keyframes photo-strip-scroll {
-            from { transform: translateX(0); }
-            to   { transform: translateX(-50%); }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            .photo-strip-track { animation: none; }
         }
 
         /* ── Mobile improvements ── */
@@ -1916,7 +1887,6 @@
 
             
             <section class="hero-mission hero-ps1 relative brutalist-border-b p-8 md:p-16 lg:p-24 flex flex-col justify-center muster-strip" vid="31">
-                <div class="label-badge" vid="32">Mission</div>
                 <div class="hero-bg-image" aria-hidden="true"></div>
 
                 <div class="hero-ps1-layout">
@@ -1934,7 +1904,6 @@
             <section class="relative brutalist-border-b solid-bg" vid="39">
                 
                 <div class="relative p-8 md:p-12 accent-panel muster-strip" vid="40">
-                    <div class="label-badge" vid="41">Main Goals</div>
                     <div class="text-sm font-light italic uppercase stage-title mb-6 text-[#F3F3E1]/70" vid="42">Objectives</div>
                     
                     <div class="objectives-showcase" vid="43">
@@ -1985,7 +1954,6 @@
             
             <section class="relative brutalist-border-b solid-bg" vid="47">
                 <div class="relative p-8 md:p-12 flex flex-col accent-panel muster-strip" vid="48">
-                    <div class="label-badge" vid="48">Community</div>
                     <div class="text-sm font-light italic uppercase stage-title mb-6 text-[#F3F3E1]/70" vid="49">About EGDA</div>
 
                     <div class="mt-auto mb-auto" vid="50">
@@ -1994,18 +1962,6 @@
 
                         <div class="photo-strip -mx-8 md:-mx-12 mb-10">
                             <div class="photo-strip-track">
-                                <div class="photo-strip-item"><img src="/assets/meetups/meetup-1.jpg" alt="EGDA meetup"></div>
-                                <div class="photo-strip-item"><img src="/assets/meetups/meetup-2.jpg" alt="EGDA meetup"></div>
-                                <div class="photo-strip-item"><img src="/assets/meetups/meetup-3.jpg" alt="EGDA meetup"></div>
-                                <div class="photo-strip-item"><img src="/assets/meetups/meetup-4.jpg" alt="EGDA meetup"></div>
-                                <div class="photo-strip-item"><img src="/assets/meetups/meetup-5.jpg" alt="EGDA meetup"></div>
-                                <div class="photo-strip-item"><img src="/assets/meetups/meetup-6.jpg" alt="EGDA meetup"></div>
-                                <div class="photo-strip-item"><img src="/assets/meetups/meetup-7.jpg" alt="EGDA meetup"></div>
-                                <div class="photo-strip-item"><img src="/assets/meetups/meetup-8.jpg" alt="EGDA meetup"></div>
-                                <div class="photo-strip-item"><img src="/assets/meetups/1780761942524.jpg" alt="EGDA meetup"></div>
-                                <div class="photo-strip-item"><img src="/assets/meetups/1780761942760.jpg" alt="EGDA meetup"></div>
-                                <div class="photo-strip-item"><img src="/assets/meetups/1780761943002.jpg" alt="EGDA meetup"></div>
-                                <!-- duplicate for seamless loop -->
                                 <div class="photo-strip-item"><img src="/assets/meetups/meetup-1.jpg" alt="EGDA meetup"></div>
                                 <div class="photo-strip-item"><img src="/assets/meetups/meetup-2.jpg" alt="EGDA meetup"></div>
                                 <div class="photo-strip-item"><img src="/assets/meetups/meetup-3.jpg" alt="EGDA meetup"></div>
@@ -2062,7 +2018,6 @@
 
             
             <section id="membership" class="relative brutalist-border-b solid-bg flex flex-col" vid="72">
-                <div class="label-badge" vid="73">Membership</div>
 
                 <div class="relative p-8 md:p-12 lg:p-16 brutalist-border-b membership-intro accent-panel muster-strip" vid="246">
                     <div class="text-sm font-light italic uppercase stage-title mb-6 text-[#F3F3E1]/70" vid="247">Join EGDA</div>
@@ -2081,27 +2036,27 @@
                         <div class="space-y-8" vid="77">
                             <div class="benefit-row flex items-start gap-5">
                                 <svg class="w-7 h-7 mt-1 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-linejoin="miter" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"></path></svg>
-                                <p class="text-2xl md:text-3xl font-bold uppercase tracking-tight leading-tight">Represent the Estonian games industry and help shape its future</p>
+                                <p class="text-base md:text-lg font-light leading-relaxed text-[#F3F3E1]/80">Represent the Estonian games industry and help shape its future</p>
                             </div>
                             <div class="benefit-row flex items-start gap-5">
                                 <svg class="w-7 h-7 mt-1 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-linejoin="miter" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"></path></svg>
-                                <p class="text-2xl md:text-3xl font-bold uppercase tracking-tight leading-tight">Connect with developers, studios, publishers, educators, and industry partners</p>
+                                <p class="text-base md:text-lg font-light leading-relaxed text-[#F3F3E1]/80">Connect with developers, studios, publishers, educators, and industry partners</p>
                             </div>
                             <div class="benefit-row flex items-start gap-5">
                                 <svg class="w-7 h-7 mt-1 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-linejoin="miter" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"></path></svg>
-                                <p class="text-2xl md:text-3xl font-bold uppercase tracking-tight leading-tight">Access shared industry contacts and opportunities <span class="font-light italic text-[#F3F3E1]/60">(with consent)</span></p>
+                                <p class="text-base md:text-lg font-light leading-relaxed text-[#F3F3E1]/80">Access shared industry contacts and opportunities <span class="font-light italic text-[#F3F3E1]/60">(with consent)</span></p>
                             </div>
                             <div class="benefit-row flex items-start gap-5">
                                 <svg class="w-7 h-7 mt-1 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-linejoin="miter" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"></path></svg>
-                                <p class="text-2xl md:text-3xl font-bold uppercase tracking-tight leading-tight">Participate in general meetings and vote on key decisions</p>
+                                <p class="text-base md:text-lg font-light leading-relaxed text-[#F3F3E1]/80">Participate in general meetings and vote on key decisions</p>
                             </div>
                             <div class="benefit-row flex items-start gap-5">
                                 <svg class="w-7 h-7 mt-1 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-linejoin="miter" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"></path></svg>
-                                <p class="text-2xl md:text-3xl font-bold uppercase tracking-tight leading-tight">Stay informed about EGDA’s activities, projects, and initiatives</p>
+                                <p class="text-base md:text-lg font-light leading-relaxed text-[#F3F3E1]/80">Stay informed about EGDA’s activities, projects, and initiatives</p>
                             </div>
                             <div class="benefit-row flex items-start gap-5">
                                 <svg class="w-7 h-7 mt-1 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-linejoin="miter" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"></path></svg>
-                                <p class="text-2xl md:text-3xl font-bold uppercase tracking-tight leading-tight">Be part of a growing community working to strengthen Estonian game development</p>
+                                <p class="text-base md:text-lg font-light leading-relaxed text-[#F3F3E1]/80">Be part of a growing community working to strengthen Estonian game development</p>
                             </div>
                         </div>
                     </div>
@@ -2136,7 +2091,6 @@
                 
                 
                 <div class="relative p-8 md:p-12 brutalist-border-r brutalist-border-b md:brutalist-border-b-0 min-h-[400px] flex flex-col accent-panel" vid="112">
-                    <div class="label-badge" vid="113">EGDA News</div>
                     <div class="text-sm font-light italic uppercase stage-title mb-8 text-[#F3F3E1]/70" vid="114">Association updates</div>
                     
                     <div class="news-placeholder flex-grow flex items-center justify-center border border-dashed border-[#F3F3E1]/30 p-8" vid="115">
@@ -2152,7 +2106,6 @@
 
                 
                 <div class="relative p-8 md:p-12 min-h-[400px] flex flex-col brutalist-border-b md:brutalist-border-b-0 accent-panel" vid="121">
-                    <div class="label-badge" vid="122">Game News</div>
                     <div class="text-sm font-light italic uppercase stage-title mb-8 text-[#F3F3E1]/70" vid="123">Local game development news</div>
                     
                     <div class="news-placeholder flex-grow flex items-center justify-center border border-dashed border-[#F3F3E1]/30 p-8" vid="124">
@@ -2171,7 +2124,6 @@
 
             <section class="relative brutalist-border-b solid-bg">
                 <div class="relative p-8 md:p-12 accent-panel muster-strip">
-                    <div class="label-badge">Community</div>
                     <div class="text-sm font-light italic uppercase stage-title mb-6 text-[#F3F3E1]/70">Connect</div>
 
                     <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12 items-end mb-10">
@@ -2194,7 +2146,6 @@
 
 
             <section class="relative brutalist-border-b solid-bg" vid="200">
-                <div class="label-badge" vid="201">Board</div>
                 <div class="relative p-8 md:p-12 brutalist-border-b accent-panel muster-strip" vid="202">
                     <div class="text-sm font-light italic uppercase stage-title mb-6 text-[#F3F3E1]/70" vid="203">Current Board Members</div>
                     <h2 class="text-4xl md:text-6xl lg:text-7xl font-black uppercase tracking-tighter leading-[0.9] max-w-5xl" vid="204">People keeping <span class="accent-text">EGDA</span> moving.</h2>
@@ -2504,6 +2455,25 @@
             window.requestAnimationFrame(update);
             window.setTimeout(hideLoader, 3200);
         })();
+    </script>
+
+    <script>
+        document.querySelectorAll('.photo-strip').forEach(function(strip) {
+            var isDown = false, startX, scrollLeft;
+            strip.addEventListener('mousedown', function(e) {
+                isDown = true;
+                startX = e.pageX - strip.offsetLeft;
+                scrollLeft = strip.scrollLeft;
+            });
+            strip.addEventListener('mouseleave', function() { isDown = false; });
+            strip.addEventListener('mouseup', function() { isDown = false; });
+            strip.addEventListener('mousemove', function(e) {
+                if (!isDown) return;
+                e.preventDefault();
+                var x = e.pageX - strip.offsetLeft;
+                strip.scrollLeft = scrollLeft - (x - startX);
+            });
+        });
     </script>
 
 </body></html>

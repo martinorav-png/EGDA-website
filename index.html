@@ -1793,33 +1793,27 @@
 
             
             <section class="grid grid-cols-1 md:grid-cols-2 flex-grow solid-bg" vid="111">
-                
-                
+
                 <div class="relative p-8 md:p-12 brutalist-border-r brutalist-border-b md:brutalist-border-b-0 min-h-[400px] flex flex-col accent-panel" vid="112">
-                    <div class="text-sm font-light italic uppercase stage-title mb-8 text-[#F3F3E1]/70" vid="114">Association updates</div>
-                    
-                    <div class="news-placeholder flex-grow flex items-center justify-center border border-dashed border-[#F3F3E1]/30 p-8" vid="115">
-                        <div class="text-center opacity-50" vid="116">
-                            <svg class="w-8 h-8 mx-auto mb-4 animate-pulse" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" vid="117">
-                                <path stroke-linecap="square" stroke-linejoin="miter" d="M8.25 21v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21m0 0h4.5V3.545M12.75 21h7.5V10.75M2.25 21h1.5m18 0h-18M2.25 9l4.5-1.636M18.75 3l-1.5.545m0 6.205 3 1m1.5.5-1.5-.5M6.75 7.364V3h-3v18m3-13.636 10.5-3.819" vid="118"></path>
-                            </svg>
-                            <p class="text-sm font-bold uppercase tracking-widest mb-2" vid="119">Ready for updates</p>
-                            <p class="text-xs font-light uppercase" vid="120">No official announcements yet.</p>
+                    <div class="text-sm font-light italic uppercase stage-title mb-8 text-[#F3F3E1]/70">Association updates</div>
+                    <div id="news-egda" class="flex flex-col gap-6 flex-grow">
+                        <div class="news-placeholder flex-grow flex items-center justify-center border border-dashed border-[#F3F3E1]/30 p-8">
+                            <div class="text-center opacity-50">
+                                <p class="text-sm font-bold uppercase tracking-widest mb-2">Ready for updates</p>
+                                <p class="text-xs font-light uppercase">No official announcements yet.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                
                 <div class="relative p-8 md:p-12 min-h-[400px] flex flex-col brutalist-border-b md:brutalist-border-b-0 accent-panel" vid="121">
-                    <div class="text-sm font-light italic uppercase stage-title mb-8 text-[#F3F3E1]/70" vid="123">Local game development news</div>
-                    
-                    <div class="news-placeholder flex-grow flex items-center justify-center border border-dashed border-[#F3F3E1]/30 p-8" vid="124">
-                        <div class="text-center opacity-50" vid="125">
-                            <svg class="w-8 h-8 mx-auto mb-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" vid="126">
-                                <path stroke-linecap="square" stroke-linejoin="miter" d="m21 7.5-9-5.25L3 7.5m18 0-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" vid="127"></path>
-                            </svg>
-                            <p class="text-sm font-bold uppercase tracking-widest mb-2" vid="128">Ready for local news</p>
-                            <p class="text-xs font-light uppercase" vid="129">Reserved for releases, events and studio updates.</p>
+                    <div class="text-sm font-light italic uppercase stage-title mb-8 text-[#F3F3E1]/70">Local game development news</div>
+                    <div id="news-local" class="flex flex-col gap-6 flex-grow">
+                        <div class="news-placeholder flex-grow flex items-center justify-center border border-dashed border-[#F3F3E1]/30 p-8">
+                            <div class="text-center opacity-50">
+                                <p class="text-sm font-bold uppercase tracking-widest mb-2">Ready for local news</p>
+                                <p class="text-xs font-light uppercase">Reserved for releases, events and studio updates.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -2116,6 +2110,47 @@
                 strip.style.cursor = '';
             });
         });
+    </script>
+
+    <script>
+        (function () {
+            function formatDate(str) {
+                if (!str) return '';
+                var d = new Date(str);
+                return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+            }
+
+            function renderItem(item) {
+                var link = item.link
+                    ? '<a href="' + item.link + '" target="_blank" rel="noopener" class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[var(--blue)] hover:underline mt-3">' + (item.link_label || 'Read more') + ' →</a>'
+                    : '';
+                return '<article class="border-t border-[#F3F3E1]/20 pt-5 first:border-t-0 first:pt-0">'
+                    + '<p class="text-xs font-light uppercase tracking-widest text-[#F3F3E1]/50 mb-2">' + formatDate(item.date) + '</p>'
+                    + '<h3 class="text-base font-bold uppercase tracking-tight leading-tight mb-2">' + item.title + '</h3>'
+                    + (item.body ? '<p class="text-sm font-light leading-relaxed text-[#F3F3E1]/70">' + item.body + '</p>' : '')
+                    + link
+                    + '</article>';
+            }
+
+            fetch('/content/news.json')
+                .then(function (r) { return r.json(); })
+                .then(function (data) {
+                    var items = (data.items || []).slice().sort(function (a, b) {
+                        return new Date(b.date) - new Date(a.date);
+                    });
+
+                    var egda = items.filter(function (i) { return i.category === 'egda'; });
+                    var local = items.filter(function (i) { return i.category === 'local'; });
+
+                    ['egda', 'local'].forEach(function (cat) {
+                        var el = document.getElementById('news-' + cat);
+                        var list = cat === 'egda' ? egda : local;
+                        if (!el || list.length === 0) return;
+                        el.innerHTML = list.map(renderItem).join('');
+                    });
+                })
+                .catch(function () { /* silently fail — placeholders remain */ });
+        })();
     </script>
 
 </body></html>

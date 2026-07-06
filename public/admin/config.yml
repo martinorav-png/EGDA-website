@@ -1,0 +1,38 @@
+backend:
+  name: github
+  repo: martinorav-png/EDGA-website
+  branch: main
+  base_url: https://YOUR_VERCEL_URL
+  auth_endpoint: api/auth
+
+media_folder: public/assets/news-media
+public_folder: /assets/news-media
+
+collections:
+  - name: news
+    label: News
+    files:
+      - name: all_news
+        label: All News Items
+        file: public/content/news.json
+        fields:
+          - name: items
+            label: News Items
+            widget: list
+            summary: "{{fields.title}} ({{fields.category}})"
+            fields:
+              - { label: Title, name: title, widget: string }
+              - label: Category
+                name: category
+                widget: select
+                options:
+                  - { label: "EGDA Updates", value: egda }
+                  - { label: "Local News", value: local }
+              - label: Date
+                name: date
+                widget: datetime
+                date_format: "YYYY-MM-DD"
+                time_format: false
+              - { label: Body, name: body, widget: text }
+              - { label: "Link URL (optional)", name: link, widget: string, required: false }
+              - { label: "Link Label (optional)", name: link_label, widget: string, required: false, default: "Read more" }

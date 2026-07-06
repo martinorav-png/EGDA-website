@@ -1763,6 +1763,9 @@
             width: auto;
             display: block;
             object-fit: cover;
+            pointer-events: none;
+            -webkit-user-drag: none;
+            user-drag: none;
         }
 
         /* ── Mobile improvements ── */
@@ -2461,21 +2464,21 @@
         document.querySelectorAll('.photo-strip').forEach(function(strip) {
             var active = false, startX, startScroll;
             strip.addEventListener('mousedown', function(e) {
+                e.preventDefault();
                 active = true;
                 startX = e.clientX;
                 startScroll = strip.scrollLeft;
-                strip.style.userSelect = 'none';
+                document.body.style.userSelect = 'none';
                 strip.style.cursor = 'grabbing';
             });
             document.addEventListener('mousemove', function(e) {
                 if (!active) return;
-                e.preventDefault();
                 strip.scrollLeft = startScroll - (e.clientX - startX);
-            }, { passive: false });
+            });
             document.addEventListener('mouseup', function() {
                 if (!active) return;
                 active = false;
-                strip.style.userSelect = '';
+                document.body.style.userSelect = '';
                 strip.style.cursor = '';
             });
         });

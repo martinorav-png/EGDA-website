@@ -20,7 +20,7 @@ export default function HeroTitle() {
             setHasStarted(true);
             timeoutId = window.setTimeout(() => {
               setShowSecondLine(true);
-            }, 2000);
+            }, 900);
             observer.disconnect();
           }
         });
@@ -47,7 +47,7 @@ export default function HeroTitle() {
             animateOn="load"
             sequential
             revealDirection="start"
-            speed={95}
+            speed={50}
             useOriginalCharsOnly
             parentClassName="hero-ps1-title-decrypt"
             className="hero-ps1-title-revealed"
@@ -64,7 +64,7 @@ export default function HeroTitle() {
             animateOn="load"
             sequential
             revealDirection="start"
-            speed={165}
+            speed={80}
             useOriginalCharsOnly
             parentClassName="hero-ps1-title-decrypt"
             className="hero-ps1-title-revealed"

@@ -2124,7 +2124,39 @@
 
     <script>
         document.querySelectorAll('.photo-strip').forEach(function(strip) {
+            var track = strip.querySelector('.photo-strip-track');
+            if (!track) return;
+
+            // Duplicate items for infinite loop
+            var origItems = Array.from(track.querySelectorAll('.photo-strip-item'));
+            origItems.forEach(function(item) {
+                track.appendChild(item.cloneNode(true));
+            });
+
+            // loopAt = offsetLeft of first clone = exact pixel where content repeats
+            var loopAt = 0;
+            function measureLoop() {
+                var firstClone = track.children[origItems.length];
+                if (firstClone) loopAt = firstClone.offsetLeft;
+            }
+            requestAnimationFrame(measureLoop);
+            window.addEventListener('load', measureLoop);
+            window.addEventListener('resize', measureLoop);
+
             var active = false, startX, startScroll;
+
+            // Teleport seamlessly when crossing the loop boundary
+            strip.addEventListener('scroll', function() {
+                if (!loopAt) return;
+                if (strip.scrollLeft >= loopAt) {
+                    strip.scrollLeft -= loopAt;
+                    if (active) startScroll -= loopAt;
+                } else if (strip.scrollLeft <= 0) {
+                    strip.scrollLeft += loopAt;
+                    if (active) startScroll += loopAt;
+                }
+            });
+
             strip.addEventListener('mousedown', function(e) {
                 e.preventDefault();
                 active = true;

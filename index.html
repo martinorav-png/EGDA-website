@@ -212,6 +212,11 @@
             border-bottom: 2px solid var(--fg);
         }
 
+        @keyframes lanyard-blink {
+            0%, 100% { opacity: 0.35; }
+            50%       { opacity: 0.15; }
+        }
+
         @keyframes icon-float {
             0%, 100% { transform: translateY(0); }
             50%       { transform: translateY(-8px); }
@@ -1822,6 +1827,9 @@
                     
                     <div id="application" class="col-span-1 lg:col-span-2 p-8 md:p-12 apply-lanyard-panel flex flex-col items-center justify-center text-center group relative overflow-hidden" vid="99">
                         <div id="egda-lanyard-root" aria-hidden="true"></div>
+                        <div id="lanyard-loader" aria-hidden="true" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:1;">
+                            <span style="font-size:0.7rem;font-family:var(--font-mono,monospace);letter-spacing:0.15em;text-transform:uppercase;opacity:0.35;animation:lanyard-blink 1.2s ease-in-out infinite;">Loading badge...</span>
+                        </div>
                         <div class="apply-hint" aria-hidden="true">
                             <span>Click to apply</span>
                             <svg viewBox="0 0 210 145" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -2139,6 +2147,19 @@
     </script>
 
     <script>
+        (function() {
+            var loader = document.getElementById('lanyard-loader');
+            var root = document.getElementById('egda-lanyard-root');
+            if (!loader || !root) return;
+            var observer = new MutationObserver(function() {
+                if (root.querySelector('canvas')) {
+                    loader.style.display = 'none';
+                    observer.disconnect();
+                }
+            });
+            observer.observe(root, { childList: true, subtree: true });
+        })();
+
         document.querySelectorAll('a[href="#application"]').forEach(function(link) {
             link.addEventListener('click', function(e) {
                 e.preventDefault();

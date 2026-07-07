@@ -212,6 +212,26 @@
             border-bottom: 2px solid var(--fg);
         }
 
+        @keyframes icon-float {
+            0%, 100% { transform: translateY(0); }
+            50%       { transform: translateY(-8px); }
+        }
+
+        .objective-card-icon {
+            width: 48px;
+            height: 48px;
+            object-fit: contain;
+            filter: brightness(0) invert(1);
+            margin-bottom: 0.5rem;
+            animation: icon-float 2.4s ease-in-out infinite;
+        }
+
+        .objective-card:nth-child(1) .objective-card-icon { animation-delay: 0s; }
+        .objective-card:nth-child(2) .objective-card-icon { animation-delay: 0.2s; }
+        .objective-card:nth-child(3) .objective-card-icon { animation-delay: 0.4s; }
+        .objective-card:nth-child(4) .objective-card-icon { animation-delay: 0.6s; }
+        .objective-card:nth-child(5) .objective-card-icon { animation-delay: 0.8s; }
+
         .objective-card-badge {
             width: 64px;
             height: 64px;
@@ -1560,26 +1580,33 @@
                 <div class="grid grid-cols-12 relative" vid="17">
 
                     <!-- Logo — single row on mobile by sharing with Discord -->
-                    <div class="col-span-8 md:col-span-3 brutalist-border-r flex items-center justify-center p-3 md:p-4 interactive-cell" onclick="window.scrollTo(0,0)" vid="18">
-                        <img src="/EDGA%20Logo%20Final.png" alt="EGDA" class="h-10 md:h-16 w-auto object-contain scale-[1.45] transform-gpu" vid="19">
+                    <div class="col-span-5 md:col-span-3 brutalist-border-r flex items-center justify-center p-2 md:p-2 interactive-cell" id="logo-btn" vid="18">
+                        <img src="/EDGA%20Logo%20Final.png" alt="EGDA" class="h-7 md:h-11 w-auto object-contain scale-[1.45] transform-gpu" vid="19">
                     </div>
 
                     <!-- Tagline (desktop only) -->
-                    <div class="md:col-span-5 brutalist-border-r flex items-center p-4 px-6 hidden md:flex" vid="20">
+                    <div class="md:col-span-4 brutalist-border-r flex items-center p-3 px-5 hidden md:flex" vid="20">
                         <span class="text-sm font-medium uppercase tracking-tight" vid="21">Estonian Game Developers Association · Eesti Mänguarendajate Liit</span>
                     </div>
 
                     <!-- Contact (desktop only, icon only) -->
-                    <div class="md:col-span-1 brutalist-border-r items-center justify-center p-4 interactive-cell hidden md:flex" vid="22">
+                    <div class="md:col-span-1 brutalist-border-r items-center justify-center p-2 interactive-cell hidden md:flex" vid="22">
                         <a href="mailto:info.egda@gmail.com" class="flex items-center gap-2 w-full h-full justify-center" vid="23">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" vid="24">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" vid="24">
                                 <path stroke-linecap="square" stroke-linejoin="miter" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" vid="25"></path>
                             </svg>
                         </a>
                     </div>
 
+                    <!-- Apply — desktop only -->
+                    <div class="md:col-span-2 brutalist-border-r items-center justify-center p-2 interactive-cell hidden md:flex" vid="apply-btn">
+                        <a href="#application" class="flex items-center gap-2 w-full h-full justify-center">
+                            <span class="text-xs font-bold uppercase tracking-wide">Apply</span>
+                        </a>
+                    </div>
+
                     <!-- Discord — prominent on both mobile and desktop -->
-                    <div class="col-span-4 md:col-span-3 flex items-center justify-center p-3 md:p-4 interactive-cell" vid="27">
+                    <div class="col-span-7 md:col-span-2 flex items-center justify-center p-2 interactive-cell" vid="27">
                         <a href="https://discord.gg/mTkj64Aj4" target="_blank" class="flex items-center gap-2 w-full h-full justify-center" vid="28">
                             <svg class="w-5 h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" vid="29">
                                 <path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z" vid="30"></path>
@@ -1618,35 +1645,35 @@
 
                         <div class="objectives-card-row">
                             <article class="objective-card">
-                                <div class="objective-card-badge"></div>
+                                <img src="/assets/icons/icons8-advocacy-64.png" class="objective-card-icon" alt="">
                                 <h3 class="objective-card-title">Advocacy</h3>
                                 <p class="objective-card-copy">We give game developers and studios a stronger voice while raising the visibility of Estonia's games industry.</p>
                                 <div class="objective-card-rule" aria-hidden="true"></div>
                             </article>
 
                             <article class="objective-card">
-                                <div class="objective-card-badge education"></div>
+                                <img src="/assets/icons/icons8-education-50.png" class="objective-card-icon" alt="">
                                 <h3 class="objective-card-title">Education</h3>
                                 <p class="objective-card-copy">We support the next generation of game developers through workshops, talks, mentorship, and knowledge sharing.</p>
                                 <div class="objective-card-rule" aria-hidden="true"></div>
                             </article>
 
                             <article class="objective-card">
-                                <div class="objective-card-badge networking"></div>
+                                <img src="/assets/icons/icons8-collaborating-in-circle-48.png" class="objective-card-icon" alt="">
                                 <h3 class="objective-card-title">Networking</h3>
                                 <p class="objective-card-copy">We bring developers, studios, educators, and partners together through events, introductions, and collaboration.</p>
                                 <div class="objective-card-rule" aria-hidden="true"></div>
                             </article>
 
                             <article class="objective-card">
-                                <div class="objective-card-badge growth"></div>
+                                <img src="/assets/icons/icons8-rocket-48.png" class="objective-card-icon" alt="">
                                 <h3 class="objective-card-title">Industry Growth</h3>
                                 <p class="objective-card-copy">We support the growth of Estonia's game development ecosystem through collaboration, partnerships, and visibility.</p>
                                 <div class="objective-card-rule" aria-hidden="true"></div>
                             </article>
 
                             <article class="objective-card">
-                                <div class="objective-card-badge community"></div>
+                                <img src="/assets/icons/icons8-community-48.png" class="objective-card-icon" alt="">
                                 <h3 class="objective-card-title">Community</h3>
                                 <p class="objective-card-copy">We bring the community together through events and an active Discord server, creating a space to connect, collaborate and share knowledge.</p>
                                 <div class="objective-card-rule" aria-hidden="true"></div>
@@ -1656,7 +1683,35 @@
                 </div>
             </section>
 
-            
+            <section class="grid grid-cols-1 md:grid-cols-2 flex-grow solid-bg" vid="111">
+
+                <div class="relative p-8 md:p-12 brutalist-border-r brutalist-border-b md:brutalist-border-b-0 min-h-[400px] flex flex-col accent-panel" vid="112">
+                    <div class="text-sm font-light italic uppercase stage-title mb-8 text-[#F3F3E1]/70">Association updates</div>
+                    <div id="news-egda" class="flex flex-col gap-6 flex-grow">
+                        <div class="news-placeholder flex-grow flex items-center justify-center border border-dashed border-[#F3F3E1]/30 p-8">
+                            <div class="text-center opacity-50">
+                                <p class="text-sm font-bold uppercase tracking-widest mb-2">Ready for updates</p>
+                                <p class="text-xs font-light uppercase">No official announcements yet.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative p-8 md:p-12 min-h-[400px] flex flex-col brutalist-border-b md:brutalist-border-b-0 accent-panel" vid="121">
+                    <div class="text-sm font-light italic uppercase stage-title mb-8 text-[#F3F3E1]/70">Local game development news</div>
+                    <div id="news-local" class="flex flex-col gap-6 flex-grow">
+                        <div class="news-placeholder flex-grow flex items-center justify-center border border-dashed border-[#F3F3E1]/30 p-8">
+                            <div class="text-center opacity-50">
+                                <p class="text-sm font-bold uppercase tracking-widest mb-2">Ready for local news</p>
+                                <p class="text-xs font-light uppercase">Reserved for releases, events and studio updates.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+
             <section class="relative brutalist-border-b solid-bg" vid="47">
                 <div class="relative p-8 md:p-12 flex flex-col accent-panel muster-strip" vid="48">
                     <div class="text-sm font-light italic uppercase stage-title mb-6 text-[#F3F3E1]/70" vid="49">About EGDA</div>
@@ -1667,11 +1722,9 @@
 
                         <div class="photo-strip -mx-8 md:-mx-12 mb-10">
                             <div class="photo-strip-track">
-                                <div class="photo-strip-item"><img src="/assets/meetups/meetup-1.jpg" alt="EGDA meetup"></div>
                                 <div class="photo-strip-item"><img src="/assets/meetups/meetup-2.jpg" alt="EGDA meetup"></div>
                                 <div class="photo-strip-item"><img src="/assets/meetups/meetup-3.jpg" alt="EGDA meetup"></div>
                                 <div class="photo-strip-item"><img src="/assets/meetups/meetup-4.jpg" alt="EGDA meetup"></div>
-                                <div class="photo-strip-item"><img src="/assets/meetups/meetup-5.jpg" alt="EGDA meetup"></div>
                                 <div class="photo-strip-item"><img src="/assets/meetups/meetup-6.jpg" alt="EGDA meetup"></div>
                                 <div class="photo-strip-item"><img src="/assets/meetups/meetup-7.jpg" alt="EGDA meetup"></div>
                                 <div class="photo-strip-item"><img src="/assets/meetups/meetup-8.jpg" alt="EGDA meetup"></div>
@@ -1792,35 +1845,6 @@
             </section>
 
             
-            <section class="grid grid-cols-1 md:grid-cols-2 flex-grow solid-bg" vid="111">
-
-                <div class="relative p-8 md:p-12 brutalist-border-r brutalist-border-b md:brutalist-border-b-0 min-h-[400px] flex flex-col accent-panel" vid="112">
-                    <div class="text-sm font-light italic uppercase stage-title mb-8 text-[#F3F3E1]/70">Association updates</div>
-                    <div id="news-egda" class="flex flex-col gap-6 flex-grow">
-                        <div class="news-placeholder flex-grow flex items-center justify-center border border-dashed border-[#F3F3E1]/30 p-8">
-                            <div class="text-center opacity-50">
-                                <p class="text-sm font-bold uppercase tracking-widest mb-2">Ready for updates</p>
-                                <p class="text-xs font-light uppercase">No official announcements yet.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="relative p-8 md:p-12 min-h-[400px] flex flex-col brutalist-border-b md:brutalist-border-b-0 accent-panel" vid="121">
-                    <div class="text-sm font-light italic uppercase stage-title mb-8 text-[#F3F3E1]/70">Local game development news</div>
-                    <div id="news-local" class="flex flex-col gap-6 flex-grow">
-                        <div class="news-placeholder flex-grow flex items-center justify-center border border-dashed border-[#F3F3E1]/30 p-8">
-                            <div class="text-center opacity-50">
-                                <p class="text-sm font-bold uppercase tracking-widest mb-2">Ready for local news</p>
-                                <p class="text-xs font-light uppercase">Reserved for releases, events and studio updates.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </section>
-
-
             <section class="relative brutalist-border-b solid-bg">
                 <div class="relative p-8 md:p-12 accent-panel muster-strip">
                     <div class="text-sm font-light italic uppercase stage-title mb-6 text-[#F3F3E1]/70">Connect</div>
@@ -1932,8 +1956,10 @@
                         </div>
                         <div class="text-xs md:text-sm font-medium uppercase leading-relaxed text-[#F3F3E1]/80 space-y-1" vid="138">
                             <p vid="139">Estonian Game Developers Association</p>
-                            <p vid="140">Bringing the local game development community together</p>
-                            <p class="pt-4 opacity-50" vid="141">Estonia</p>
+                            <p>Eesti Mänguarendajate Liit MTÜ</p>
+                            <p>Reg. 80659500</p>
+                            <p class="pt-4 opacity-50 normal-case">Built by <a href="https://martinorav.com" target="_blank" rel="noopener" class="underline">Martin Orav</a></p>
+                            <p class="opacity-50 normal-case">Icons by <a href="https://icons8.com" target="_blank" rel="noopener" class="underline">Icons8</a></p>
                         </div>
                     </div>
 
@@ -2109,6 +2135,19 @@
                 document.body.style.userSelect = '';
                 strip.style.cursor = '';
             });
+        });
+    </script>
+
+    <script>
+        document.querySelectorAll('a[href="#application"]').forEach(function(link) {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector('#application').scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        document.getElementById('logo-btn').addEventListener('click', function() {
+            document.querySelector('header').scrollIntoView({ behavior: 'smooth' });
         });
     </script>
 

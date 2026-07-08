@@ -33,18 +33,9 @@ export default async function handler(req, res) {
 (function () {
   var token = ${JSON.stringify(data.access_token)};
   var message = 'authorization:github:success:' + JSON.stringify({ token: token, provider: 'github' });
-
-  function receiveMessage(e) {
-    if (e.data === 'authorizing:github') {
-      window.removeEventListener('message', receiveMessage);
-      window.opener.postMessage(message, e.origin);
-      setTimeout(function () { window.close(); }, 100);
-    }
-  }
-
   if (window.opener) {
-    window.addEventListener('message', receiveMessage);
-    window.opener.postMessage('authorizing:github', '*');
+    window.opener.postMessage(message, '*');
+    setTimeout(function () { window.close(); }, 500);
   }
 })();
 </script>
@@ -59,7 +50,7 @@ export default async function handler(req, res) {
 if (window.opener) {
   window.opener.postMessage('authorization:github:error:' + ${JSON.stringify(err.message)}, '*');
 }
-window.close();
+setTimeout(function () { window.close(); }, 500);
 </script>
 </body>
 </html>`);

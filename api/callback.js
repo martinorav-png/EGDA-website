@@ -29,13 +29,19 @@ export default async function handler(req, res) {
     res.send(`<!doctype html>
 <html>
 <body>
+<p id="s" style="font-family:monospace;padding:1rem;">Token received. Sending to CMS...</p>
 <script>
 (function () {
+  var s = document.getElementById('s');
   var token = ${JSON.stringify(data.access_token)};
   var message = 'authorization:github:success:' + JSON.stringify({ token: token, provider: 'github' });
   if (window.opener) {
+    s.textContent = 'Opener found. Sending message...';
     window.opener.postMessage(message, '*');
-    setTimeout(function () { window.close(); }, 500);
+    s.textContent = 'Message sent. Closing in 2s...';
+    setTimeout(function () { window.close(); }, 2000);
+  } else {
+    s.textContent = 'ERROR: window.opener is null — popup lost its parent reference.';
   }
 })();
 </script>
@@ -46,12 +52,7 @@ export default async function handler(req, res) {
     res.send(`<!doctype html>
 <html>
 <body>
-<script>
-if (window.opener) {
-  window.opener.postMessage('authorization:github:error:' + ${JSON.stringify(err.message)}, '*');
-}
-setTimeout(function () { window.close(); }, 500);
-</script>
+<p style="font-family:monospace;padding:1rem;color:red;">ERROR: ${err.message}</p>
 </body>
 </html>`);
   }

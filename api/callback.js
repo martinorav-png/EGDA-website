@@ -33,26 +33,21 @@ export default async function handler(req, res) {
 <script>
 (function () {
   var s = document.getElementById('s');
-  var token = ${JSON.stringify(data.access_token)};
-  var msgRaw  = 'authorization:github:success:' + token;
-  var msgJson = 'authorization:github:success:' + JSON.stringify({ token: token, provider: 'github' });
-
-  try {
-    var bc = new BroadcastChannel('decap_cms_auth');
-    bc.postMessage(msgRaw);
-    bc.postMessage(msgJson);
-    bc.close();
-    s.textContent = 'Sent. You can close this window.';
-  } catch(e) {
-    s.textContent = 'Error: ' + e.message;
+  if (!window.opener) {
+    s.textContent = 'ERROR: window.opener is null — popup lost its parent reference.';
+    return;
   }
-
-  if (window.opener) {
-    try { window.opener.postMessage(msgRaw, '*'); } catch(e) {}
-    try { window.opener.postMessage(msgJson, '*'); } catch(e) {}
+  var payload = JSON.stringify({ token: ${JSON.stringify(data.access_token)}, provider: 'github' });
+  // Decap's handshake: the CMS only attaches its token listener after it
+  // receives 'authorizing:github' from this window and echoes it back.
+  function receiveMessage(e) {
+    window.removeEventListener('message', receiveMessage, false);
+    window.opener.postMessage('authorization:github:success:' + payload, e.origin);
+    s.textContent = 'Token sent to CMS.';
   }
-
-  setTimeout(function () { window.close(); }, 5000);
+  window.addEventListener('message', receiveMessage, false);
+  s.textContent = 'Waiting for CMS handshake...';
+  window.opener.postMessage('authorizing:github', '*');
 })();
 </script>
 </body>

@@ -2,7 +2,7 @@ backend:
   name: github
   repo: martinorav-png/EDGA-website
   branch: main
-  base_url: https://egda.ee
+  base_url: https://www.egda.ee
   auth_endpoint: api/auth
 
 media_folder: public/assets/news-media

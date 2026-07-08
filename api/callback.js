@@ -29,20 +29,29 @@ export default async function handler(req, res) {
     res.send(`<!doctype html>
 <html>
 <body>
-<p id="s" style="font-family:monospace;padding:1rem;">Token received. Sending to CMS...</p>
+<p id="s" style="font-family:monospace;padding:1rem;">Sending auth token...</p>
 <script>
 (function () {
   var s = document.getElementById('s');
   var token = ${JSON.stringify(data.access_token)};
   var message = 'authorization:github:success:' + token;
-  if (window.opener) {
-    s.textContent = 'Opener found. Popup origin: ' + location.origin + '. Sending message...';
-    window.opener.postMessage(message, '*');
-    s.textContent = 'Message sent. Closing in 2s...';
-    setTimeout(function () { window.close(); }, 2000);
-  } else {
-    s.textContent = 'ERROR: window.opener is null — popup lost its parent reference.';
+
+  // Primary: BroadcastChannel (survives COOP opener severing)
+  try {
+    var bc = new BroadcastChannel('decap_cms_auth');
+    bc.postMessage(message);
+    bc.close();
+    s.textContent = 'Sent via BroadcastChannel. Closing...';
+  } catch(e) {
+    s.textContent = 'BroadcastChannel failed: ' + e.message;
   }
+
+  // Fallback: window.opener postMessage
+  if (window.opener) {
+    try { window.opener.postMessage(message, '*'); } catch(e) {}
+  }
+
+  setTimeout(function () { window.close(); }, 1000);
 })();
 </script>
 </body>

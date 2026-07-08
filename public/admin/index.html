@@ -8,9 +8,17 @@
   </head>
   <body>
     <script>
-      window.addEventListener('message', function(e) {
-        console.log('[CMS-DEBUG] message received — data:', JSON.stringify(e.data), '| origin:', e.origin);
-      });
+      // Re-dispatch BroadcastChannel auth messages as window message events
+      // so Decap CMS's internal listener receives them (needed because GitHub's
+      // COOP header severs window.opener in the OAuth popup).
+      var _authChannel = new BroadcastChannel('decap_cms_auth');
+      _authChannel.onmessage = function(e) {
+        console.log('[CMS-AUTH] BroadcastChannel received:', e.data);
+        window.dispatchEvent(new MessageEvent('message', {
+          data: e.data,
+          origin: window.location.origin,
+        }));
+      };
     </script>
     <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
   </body>

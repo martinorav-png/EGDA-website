@@ -1722,8 +1722,8 @@
                     <div class="text-sm font-light italic uppercase stage-title mb-6 text-[#F3F3E1]/70" vid="49">About EGDA</div>
 
                     <div class="mt-auto mb-auto" vid="50">
-                        <h2 class="text-2xl font-bold uppercase tracking-tight mb-8" vid="51">EGDA works to strengthen and grow <span class="accent-text">Estonia's game development ecosystem.</span></h2>
-                        <p class="text-base md:text-lg font-light leading-relaxed text-[#F3F3E1]/80 mb-10 max-w-3xl">We connect developers, studios, educators, cultural institutions, and industry partners through events, collaboration, education, and advocacy. We support the next generation of game developers, build connections with partners in Estonia and abroad, and promote games as an important part of contemporary culture and the creative industries. Our goal is to build a strong, connected, and sustainable game development community in Estonia.</p>
+                        <h2 id="about-heading" class="text-2xl font-bold uppercase tracking-tight mb-8" vid="51">EGDA works to strengthen and grow <span class="accent-text">Estonia's game development ecosystem.</span></h2>
+                        <p id="about-body" class="text-base md:text-lg font-light leading-relaxed text-[#F3F3E1]/80 mb-10 max-w-3xl">We connect developers, studios, educators, cultural institutions, and industry partners through events, collaboration, education, and advocacy. We support the next generation of game developers, build connections with partners in Estonia and abroad, and promote games as an important part of contemporary culture and the creative industries. Our goal is to build a strong, connected, and sustainable game development community in Estonia.</p>
 
                         <div class="photo-strip -mx-8 md:-mx-12 mb-10">
                             <div class="photo-strip-track">
@@ -2123,6 +2123,7 @@
     </script>
 
     <script>
+        function initPhotoStrips() {
         document.querySelectorAll('.photo-strip').forEach(function(strip) {
             var track = strip.querySelector('.photo-strip-track');
             if (!track) return;
@@ -2176,6 +2177,7 @@
                 strip.style.cursor = '';
             });
         });
+        }
     </script>
 
     <script>
@@ -2224,8 +2226,20 @@
                     + '</article>';
             }
 
-            fetch('/content/news.json')
-                .then(function (r) { return r.json(); })
+            function esc(str) {
+                return String(str == null ? '' : str)
+                    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+            }
+
+            function loadContent(path) {
+                return fetch(path).then(function (r) {
+                    if (!r.ok) throw new Error(path);
+                    return r.json();
+                });
+            }
+
+            loadContent('/content/news.json')
                 .then(function (data) {
                     var items = (data.items || []).slice().sort(function (a, b) {
                         return new Date(b.date) - new Date(a.date);
@@ -2242,6 +2256,84 @@
                     });
                 })
                 .catch(function () { /* silently fail — placeholders remain */ });
+
+            loadContent('/content/about.json')
+                .then(function (data) {
+                    var heading = document.getElementById('about-heading');
+                    var body = document.getElementById('about-body');
+                    if (heading && data.heading) {
+                        heading.innerHTML = esc(data.heading) + ' <span class="accent-text">' + esc(data.heading_accent) + '</span>';
+                    }
+                    if (body && data.body) {
+                        body.textContent = data.body;
+                    }
+                })
+                .catch(function () { /* keep hardcoded fallback */ });
+
+            loadContent('/content/meetups.json')
+                .then(function (data) {
+                    var track = document.querySelector('.photo-strip-track');
+                    var images = data.images || [];
+                    if (!track || images.length === 0) return;
+                    track.innerHTML = images.map(function (i) {
+                        return '<div class="photo-strip-item"><img src="' + esc(i.image) + '" alt="EGDA meetup"></div>';
+                    }).join('');
+                })
+                .catch(function () { /* keep hardcoded fallback */ })
+                .then(function () { initPhotoStrips(); });
+
+            loadContent('/content/board.json')
+                .then(function (data) {
+                    var grid = document.querySelector('.board-grid');
+                    var members = data.members || [];
+                    if (!grid || members.length === 0) return;
+                    grid.innerHTML = members.map(function (m, idx) {
+                        var border = idx < members.length - 1 ? ' brutalist-border-r' : '';
+                        var initials = String(m.name || '').trim().split(/\s+/);
+                        initials = (initials[0] || '').charAt(0) + (initials.length > 1 ? initials[initials.length - 1].charAt(0) : '');
+                        var portrait = m.photo
+                            ? '<img src="' + esc(m.photo) + '" alt="' + esc(m.name) + '">'
+                            : '<span class="board-initials">' + esc(initials.toUpperCase()) + '</span>';
+                        var linkMark = m.linkedin ? '<span class="board-link-mark" aria-hidden="true">in</span>' : '';
+                        var open = m.linkedin
+                            ? '<a class="board-card' + border + ' p-5 md:p-6 flex flex-col gap-6 interactive-cell" href="' + esc(m.linkedin) + '" target="_blank" rel="noopener noreferrer">'
+                            : '<div class="board-card' + border + ' p-5 md:p-6 flex flex-col gap-6 interactive-cell">';
+                        var close = m.linkedin ? '</a>' : '</div>';
+                        return open
+                            + '<div class="board-portrait">' + portrait + '</div>'
+                            + '<div class="mt-auto flex items-end justify-between gap-5">'
+                            + '<div>'
+                            + '<div class="board-name font-black uppercase tracking-tighter leading-none">' + esc(m.name) + '</div>'
+                            + '<div class="text-xs font-bold uppercase tracking-widest mt-3 opacity-70">' + esc(m.role || 'Board member') + '</div>'
+                            + '</div>'
+                            + linkMark
+                            + '</div>'
+                            + close;
+                    }).join('');
+                })
+                .catch(function () { /* keep hardcoded fallback */ });
+
+            loadContent('/content/contact.json')
+                .then(function (data) {
+                    if (data.email) {
+                        document.querySelectorAll('a[href^="mailto:"]').forEach(function (a) {
+                            a.href = 'mailto:' + data.email;
+                        });
+                        var footerMail = document.querySelector('footer a[href^="mailto:"]');
+                        if (footerMail) footerMail.textContent = data.email;
+                    }
+                    if (data.discord_url) {
+                        document.querySelectorAll('a[href*="discord.gg"]').forEach(function (a) {
+                            a.href = data.discord_url;
+                        });
+                    }
+                    if (data.linkedin_url) {
+                        document.querySelectorAll('a[href*="linkedin.com/company"]').forEach(function (a) {
+                            a.href = data.linkedin_url;
+                        });
+                    }
+                })
+                .catch(function () { /* keep hardcoded fallback */ });
         })();
     </script>
 

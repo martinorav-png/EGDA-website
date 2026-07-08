@@ -9,6 +9,64 @@ media_folder: public/assets/news-media
 public_folder: /assets/news-media
 
 collections:
+  - name: site
+    label: Site Content
+    files:
+      - name: hero
+        label: Hero Section
+        file: public/content/hero.json
+        fields:
+          - { label: "Title Line 1", name: title_line_1, widget: string }
+          - { label: "Title Line 2", name: title_line_2, widget: string }
+      - name: about
+        label: About EGDA
+        file: public/content/about.json
+        fields:
+          - { label: "Heading (plain part)", name: heading, widget: string, hint: "First part of the heading, shown in white." }
+          - { label: "Heading (highlighted part)", name: heading_accent, widget: string, hint: "Second part of the heading, shown in the accent colour." }
+          - { label: "About Text", name: body, widget: text }
+      - name: meetups
+        label: Meetup Photos
+        file: public/content/meetups.json
+        fields:
+          - name: images
+            label: Photos
+            label_singular: Photo
+            widget: list
+            summary: "{{fields.image}}"
+            fields:
+              - label: Image
+                name: image
+                widget: image
+                media_folder: /public/assets/meetups
+                public_folder: /assets/meetups
+      - name: board
+        label: Board Members
+        file: public/content/board.json
+        fields:
+          - name: members
+            label: Members
+            label_singular: Member
+            widget: list
+            summary: "{{fields.name}}"
+            fields:
+              - { label: Name, name: name, widget: string }
+              - { label: Role, name: role, widget: string, default: "Board member" }
+              - { label: "LinkedIn URL (optional)", name: linkedin, widget: string, required: false }
+              - label: "Photo (optional)"
+                name: photo
+                widget: image
+                required: false
+                media_folder: /public/assets/boardmembers
+                public_folder: /assets/boardmembers
+                hint: "If no photo is set, the member's initials are shown instead."
+      - name: contact
+        label: Contact & Links
+        file: public/content/contact.json
+        fields:
+          - { label: "Contact Email", name: email, widget: string }
+          - { label: "Discord Invite URL", name: discord_url, widget: string }
+          - { label: "LinkedIn Page URL", name: linkedin_url, widget: string }
   - name: news
     label: News
     files:

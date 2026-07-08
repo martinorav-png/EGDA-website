@@ -1,11 +1,33 @@
 import { useEffect, useRef, useState } from 'react';
 import DecryptedText from './DecryptedText.jsx';
 
+const DEFAULT_LINES = ["Estonia's game scene,", 'on one page.'];
+
 export default function HeroTitle() {
   const containerRef = useRef(null);
   const hasTriggeredRef = useRef(false);
   const [hasStarted, setHasStarted] = useState(false);
   const [showSecondLine, setShowSecondLine] = useState(false);
+  const [lines, setLines] = useState(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/content/hero.json')
+      .then((r) => (r.ok ? r.json() : Promise.reject()))
+      .then((data) => {
+        if (cancelled) return;
+        setLines([
+          data.title_line_1 || DEFAULT_LINES[0],
+          data.title_line_2 || DEFAULT_LINES[1],
+        ]);
+      })
+      .catch(() => {
+        if (!cancelled) setLines(DEFAULT_LINES);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   useEffect(() => {
     const node = containerRef.current;
@@ -38,12 +60,14 @@ export default function HeroTitle() {
     };
   }, []);
 
+  const [lineOne, lineTwo] = lines || DEFAULT_LINES;
+
   return (
     <h1 ref={containerRef} className="hero-ps1-title">
       <span className="hero-ps1-title-line">
-        {hasStarted ? (
+        {hasStarted && lines ? (
           <DecryptedText
-            text="Estonia's game scene,"
+            text={lineOne}
             animateOn="load"
             sequential
             revealDirection="start"
@@ -54,13 +78,13 @@ export default function HeroTitle() {
             encryptedClassName="hero-ps1-title-encrypted"
           />
         ) : (
-          <span className="hero-ps1-title-placeholder">Estonia's game scene,</span>
+          <span className="hero-ps1-title-placeholder">{lineOne}</span>
         )}
       </span>
       <span className="hero-ps1-title-line">
-        {showSecondLine ? (
+        {showSecondLine && lines ? (
           <DecryptedText
-            text="on one page."
+            text={lineTwo}
             animateOn="load"
             sequential
             revealDirection="start"
@@ -71,7 +95,7 @@ export default function HeroTitle() {
             encryptedClassName="hero-ps1-title-encrypted"
           />
         ) : (
-          <span className="hero-ps1-title-placeholder">on one page.</span>
+          <span className="hero-ps1-title-placeholder">{lineTwo}</span>
         )}
       </span>
     </h1>

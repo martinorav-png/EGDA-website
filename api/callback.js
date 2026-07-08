@@ -34,24 +34,25 @@ export default async function handler(req, res) {
 (function () {
   var s = document.getElementById('s');
   var token = ${JSON.stringify(data.access_token)};
-  var message = 'authorization:github:success:' + token;
+  var msgRaw  = 'authorization:github:success:' + token;
+  var msgJson = 'authorization:github:success:' + JSON.stringify({ token: token, provider: 'github' });
 
-  // Primary: BroadcastChannel (survives COOP opener severing)
   try {
     var bc = new BroadcastChannel('decap_cms_auth');
-    bc.postMessage(message);
+    bc.postMessage(msgRaw);
+    bc.postMessage(msgJson);
     bc.close();
-    s.textContent = 'Sent via BroadcastChannel. Closing...';
+    s.textContent = 'Sent. You can close this window.';
   } catch(e) {
-    s.textContent = 'BroadcastChannel failed: ' + e.message;
+    s.textContent = 'Error: ' + e.message;
   }
 
-  // Fallback: window.opener postMessage
   if (window.opener) {
-    try { window.opener.postMessage(message, '*'); } catch(e) {}
+    try { window.opener.postMessage(msgRaw, '*'); } catch(e) {}
+    try { window.opener.postMessage(msgJson, '*'); } catch(e) {}
   }
 
-  setTimeout(function () { window.close(); }, 1000);
+  setTimeout(function () { window.close(); }, 5000);
 })();
 </script>
 </body>

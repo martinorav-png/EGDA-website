@@ -1,6 +1,6 @@
 backend:
   name: github
-  repo: martinorav-png/EDGA-website
+  repo: martinorav-png/EGDA-website
   branch: main
   base_url: https://www.egda.ee
   auth_endpoint: api/auth

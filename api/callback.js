@@ -33,14 +33,9 @@ export default async function handler(req, res) {
 <body>
 <script>
 (function () {
-  var content = ${JSON.stringify(content)};
-  var message = 'authorization:github:success:' + content;
-  function receiveMessage(e) {
-    window.opener.postMessage(message, e.origin);
-    window.removeEventListener('message', receiveMessage);
-  }
-  window.addEventListener('message', receiveMessage);
-  window.opener.postMessage('authorizing:github', '*');
+  var message = 'authorization:github:success:' + ${JSON.stringify(content)};
+  window.opener.postMessage(message, '*');
+  window.close();
 })();
 </script>
 </body>
@@ -51,7 +46,8 @@ export default async function handler(req, res) {
 <html>
 <body>
 <script>
-window.opener.postMessage('authorization:github:error:${err.message}', '*');
+window.opener.postMessage('authorization:github:error:' + ${JSON.stringify(err.message)}, '*');
+window.close();
 </script>
 </body>
 </html>`);

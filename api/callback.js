@@ -25,17 +25,27 @@ export default async function handler(req, res) {
       throw new Error(data.error_description || 'No token received');
     }
 
-    const content = JSON.stringify({ token: data.access_token, provider: 'github' });
-
     res.setHeader('Content-Type', 'text/html');
     res.send(`<!doctype html>
 <html>
 <body>
 <script>
 (function () {
-  var message = 'authorization:github:success:' + ${JSON.stringify(content)};
-  window.opener.postMessage(message, '*');
-  window.close();
+  var token = ${JSON.stringify(data.access_token)};
+  var message = 'authorization:github:success:' + JSON.stringify({ token: token, provider: 'github' });
+
+  function receiveMessage(e) {
+    if (e.data === 'authorizing:github') {
+      window.removeEventListener('message', receiveMessage);
+      window.opener.postMessage(message, e.origin);
+      setTimeout(function () { window.close(); }, 100);
+    }
+  }
+
+  if (window.opener) {
+    window.addEventListener('message', receiveMessage);
+    window.opener.postMessage('authorizing:github', '*');
+  }
 })();
 </script>
 </body>
@@ -46,7 +56,9 @@ export default async function handler(req, res) {
 <html>
 <body>
 <script>
-window.opener.postMessage('authorization:github:error:' + ${JSON.stringify(err.message)}, '*');
+if (window.opener) {
+  window.opener.postMessage('authorization:github:error:' + ${JSON.stringify(err.message)}, '*');
+}
 window.close();
 </script>
 </body>

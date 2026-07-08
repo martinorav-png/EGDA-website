@@ -36,7 +36,7 @@ export default async function handler(req, res) {
   var token = ${JSON.stringify(data.access_token)};
   var message = 'authorization:github:success:' + token;
   if (window.opener) {
-    s.textContent = 'Opener found. Sending message...';
+    s.textContent = 'Opener found. Popup origin: ' + location.origin + '. Sending message...';
     window.opener.postMessage(message, '*');
     s.textContent = 'Message sent. Closing in 2s...';
     setTimeout(function () { window.close(); }, 2000);

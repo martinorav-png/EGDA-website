@@ -1,5 +1,6 @@
 import { createRoot } from 'react-dom/client';
 import { lazy, Suspense } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 import HeroTitle from './HeroTitle.jsx';
 import './Lanyard.css';
 
@@ -44,4 +45,9 @@ if (heroTitleRoot) {
   createRoot(heroTitleRoot).render(
     <HeroTitle />
   );
+}
+
+const analyticsRoot = document.getElementById('vercel-analytics-root');
+if (analyticsRoot) {
+  createRoot(analyticsRoot).render(<Analytics />);
 }

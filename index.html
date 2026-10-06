@@ -1020,6 +1020,237 @@
             color: var(--blue);
         }
 
+        .news-feed {
+            height: 26rem;
+            min-height: 0;
+            overflow-y: auto;
+            overscroll-behavior: contain;
+            padding-right: 0.35rem;
+            scrollbar-width: thin;
+            scrollbar-color: var(--blue) transparent;
+        }
+
+        .news-stage.is-entering {
+            animation: news-enter 380ms cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+
+        .news-stage.is-leaving {
+            animation: news-leave 200ms ease both;
+            pointer-events: none;
+        }
+
+        @keyframes news-enter {
+            from {
+                opacity: 0;
+                transform: translateY(14px);
+            }
+            to {
+                opacity: 1;
+                transform: none;
+            }
+        }
+
+        @keyframes news-leave {
+            from {
+                opacity: 1;
+                transform: none;
+            }
+            to {
+                opacity: 0;
+                transform: translateY(-8px);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .news-stage.is-entering,
+            .news-stage.is-leaving {
+                animation: none;
+            }
+        }
+
+        .news-feed::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .news-feed::-webkit-scrollbar-thumb {
+            background: var(--blue);
+        }
+
+        .news-column {
+            width: 100%;
+            max-width: 46rem;
+            margin-inline: auto;
+        }
+
+        .news-item {
+            padding: 1.15rem 0;
+            border-top: 1px solid rgba(243, 243, 225, 0.16);
+        }
+
+        .news-item:first-child {
+            border-top: 0;
+            padding-top: 0;
+        }
+
+        .news-item-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.25rem;
+        }
+
+        .news-item-copy {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .news-item-meta {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 0.35rem;
+            color: rgba(243, 243, 225, 0.48);
+            font-size: 0.68rem;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .news-item h3 {
+            margin: 0 0 0.35rem;
+            color: var(--fg);
+            font-size: 1.02rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.25;
+            text-transform: none;
+        }
+
+        .news-title {
+            display: inline;
+            margin: 0;
+            padding: 0;
+            border: 0;
+            background: none;
+            color: inherit;
+            font: inherit;
+            letter-spacing: inherit;
+            line-height: inherit;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .news-title:hover,
+        .news-title:focus-visible {
+            text-decoration: underline;
+            text-underline-offset: 0.16em;
+        }
+
+        .news-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin: 0 0 0.9rem;
+            padding: 0;
+            border: 0;
+            background: none;
+            color: var(--fg);
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        .news-back svg {
+            width: 1rem;
+            height: 1rem;
+        }
+
+        .news-back:hover,
+        .news-back:focus-visible {
+            color: #fff;
+        }
+
+        .news-detail h3 {
+            margin: 0 0 0.75rem;
+            color: var(--fg);
+            font-size: 1.35rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+
+        .news-detail-image {
+            display: block;
+            width: 100%;
+            max-height: 13rem;
+            margin: 0.15rem 0 0.9rem;
+            object-fit: cover;
+            object-position: center;
+            border-radius: 0.7rem;
+            border: 1px solid rgba(243, 243, 225, 0.16);
+        }
+
+        .news-detail-body {
+            margin: 0;
+            color: rgba(243, 243, 225, 0.78);
+            font-size: 0.95rem;
+            font-weight: 400;
+            line-height: 1.55;
+        }
+
+        .news-excerpt {
+            display: -webkit-box;
+            margin: 0;
+            overflow: hidden;
+            color: rgba(243, 243, 225, 0.68);
+            font-size: 0.9rem;
+            font-weight: 400;
+            line-height: 1.45;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+        }
+
+        .news-thumb {
+            display: block;
+            width: 8.75rem;
+            height: 5.75rem;
+            flex: 0 0 auto;
+            object-fit: cover;
+            object-position: center;
+            border-radius: 0.7rem;
+            border: 1px solid rgba(243, 243, 225, 0.16);
+        }
+
+        @media (max-width: 640px) {
+            .news-item-row {
+                gap: 0.85rem;
+            }
+
+            .news-thumb {
+                width: 5.5rem;
+                height: 4rem;
+            }
+        }
+
+        .news-link {
+            display: inline-flex;
+            margin-top: 0.55rem;
+            color: var(--fg);
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-decoration: underline;
+            text-underline-offset: 0.28em;
+            text-decoration-thickness: 1px;
+            text-transform: uppercase;
+        }
+
+        .news-link:hover {
+            color: #fff;
+        }
+
         .news-placeholder {
             border-color: var(--blue-line) !important;
             background:
@@ -1079,23 +1310,37 @@
             position: relative;
             overflow: hidden;
             isolation: isolate;
-            min-height: clamp(680px, 86vh, 920px);
-            background:
-                radial-gradient(circle at 50% 36%, rgba(28, 0, 255, 0.2), transparent 26%),
-                linear-gradient(180deg, rgba(243, 243, 225, 0.04), transparent 34%),
-                var(--bg);
+            aspect-ratio: 5000 / 2150;
+            min-height: 0 !important;
+            height: auto;
+            background: var(--bg);
             display: flex;
             align-items: center;
             justify-content: center;
-            padding-top: 3rem !important;
-            padding-bottom: 3rem !important;
+            padding: 0 !important;
         }
 
         .hero-bg-image {
             position: absolute;
-            inset: -20px;
-            background: url('/assets/taust.png') center center / cover no-repeat;
+            inset: 0;
+            background: url('/assets/egda-website-banner.jpg') center center / 100% 100% no-repeat;
             z-index: 0;
+            pointer-events: none;
+        }
+
+        .hero-bg-image::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4.25rem;
+            background: linear-gradient(
+                to bottom,
+                rgba(21, 21, 22, 0.78) 0%,
+                rgba(21, 21, 22, 0.42) 42%,
+                transparent 100%
+            );
             pointer-events: none;
         }
 
@@ -1137,7 +1382,8 @@
             align-items: center;
             justify-content: center;
             width: 100%;
-            min-height: inherit;
+            height: 100%;
+            min-height: 0;
         }
 
         .hero-ps1-copy {
@@ -1148,7 +1394,19 @@
             align-items: center;
             gap: 1.1rem;
             text-align: center;
-            transform: translateY(-2vh);
+        }
+
+        .hero-ps1-copy::before {
+            content: "";
+            position: absolute;
+            left: 50%;
+            top: 38%;
+            width: min(1080px, 92vw);
+            height: 320px;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+            pointer-events: none;
+            background: radial-gradient(ellipse at center, rgba(10, 16, 14, 0.72) 0%, rgba(10, 16, 14, 0.38) 46%, transparent 72%);
         }
 
         .hero-ps1-title {
@@ -1160,6 +1418,7 @@
             letter-spacing: -0.05em;
             text-transform: uppercase;
             color: var(--fg);
+            text-shadow: 0 2px 18px rgba(8, 12, 10, 0.55);
         }
 
         .hero-ps1-title-line {
@@ -1376,17 +1635,39 @@
             100% { margin-top: -65px; }
         }
 
-        @media (max-width: 1024px) {
+        .site-header {
+            min-height: 4.5rem;
+        }
+
+        .site-header > .grid {
+            min-height: inherit;
+        }
+
+        @media (min-width: 768px) {
+            .site-header {
+                min-height: max(7rem, calc(100svh - 100vw * 2150 / 5000));
+                transition: min-height 180ms ease;
+            }
+
+            .site-header.is-compact {
+                min-height: 5.25rem;
+            }
+
             .hero-ps1 {
-                min-height: 760px;
+                aspect-ratio: 5000 / 2150;
+                height: auto;
+                min-height: 0 !important;
+            }
+
+            .hero-bg-image {
+                background-size: 100% 100%;
+                background-position: center center;
             }
         }
 
         @media (max-width: 640px) {
             .hero-ps1 {
-                min-height: 620px;
-                padding-top: 1.2rem !important;
-                padding-bottom: 1.2rem !important;
+                padding: 0 !important;
             }
 
             .hero-ps1-title {
@@ -1404,6 +1685,19 @@
 
             .hero-ps1-orbit {
                 transform: translate(-50%, -50%) scale(0.45);
+            }
+        }
+
+        @media (max-width: 767px) {
+            .hero-ps1 {
+                aspect-ratio: auto;
+                height: auto;
+                min-height: 70svh !important;
+            }
+
+            .hero-bg-image {
+                background-size: cover;
+                background-position: 24% 58%;
             }
         }
 
@@ -1600,13 +1894,13 @@
         <main class="w-screen max-w-none flex flex-col brutalist-border-l brutalist-border-r bg-transparent pointer-events-auto min-h-screen" vid="13">
             
             
-            <header class="sticky top-0 z-50 solid-bg brutalist-border-b" vid="14">
+            <header class="site-header sticky top-0 z-50 solid-bg brutalist-border-b" vid="14">
                 
                 <div class="grid grid-cols-12 relative" vid="17">
 
                     <!-- Logo — single row on mobile by sharing with Discord -->
                     <div class="col-span-5 md:col-span-3 brutalist-border-r flex items-center justify-center p-2 md:p-2 interactive-cell" id="logo-btn" vid="18">
-                        <img src="/EDGA%20Logo%20Final.png" alt="EGDA" class="h-7 md:h-11 w-auto object-contain scale-[1.45] transform-gpu" vid="19">
+                        <img src="/EDGA%20Logo%20Final.png" alt="EGDA" class="h-9 md:h-16 w-auto object-contain" vid="19">
                     </div>
 
                     <!-- Tagline (desktop only) -->
@@ -1709,11 +2003,12 @@
                 </div>
             </section>
 
-            <section class="grid grid-cols-1 md:grid-cols-2 flex-grow solid-bg" vid="111">
+            <section class="grid grid-cols-1 flex-grow solid-bg" vid="111">
 
-                <div class="relative p-8 md:p-12 brutalist-border-r brutalist-border-b md:brutalist-border-b-0 min-h-[400px] flex flex-col accent-panel" vid="112">
-                    <div class="text-sm font-light italic uppercase stage-title mb-8 text-[#F3F3E1]/70">Association updates</div>
-                    <div id="news-egda" class="flex flex-col gap-6 flex-grow">
+                <div class="relative p-8 md:p-12 brutalist-border-b min-h-[400px] flex flex-col accent-panel" vid="112">
+                    <div class="news-column">
+                    <div class="text-sm font-light italic uppercase stage-title mb-8 text-center text-[#F3F3E1]/70">Association updates</div>
+                    <div id="news-egda" class="news-feed flex flex-col">
                         <div class="news-placeholder flex-grow flex items-center justify-center border border-dashed border-[#F3F3E1]/30 p-8">
                             <div class="text-center opacity-50">
                                 <p class="text-sm font-bold uppercase tracking-widest mb-2">Ready for updates</p>
@@ -1721,11 +2016,13 @@
                             </div>
                         </div>
                     </div>
+                    </div>
                 </div>
 
-                <div class="relative p-8 md:p-12 min-h-[400px] flex flex-col brutalist-border-b md:brutalist-border-b-0 accent-panel" vid="121">
+                <!-- Local game development news is parked. To bring it back: remove `hidden` here and add `flex flex-col`, then on the section above restore `md:grid-cols-2` and add `brutalist-border-r` on the association column. -->
+                <div class="news-local-column hidden relative p-8 md:p-12 min-h-[400px] brutalist-border-b md:brutalist-border-b-0 accent-panel" vid="121">
                     <div class="text-sm font-light italic uppercase stage-title mb-8 text-[#F3F3E1]/70">Local game development news</div>
-                    <div id="news-local" class="flex flex-col gap-6 flex-grow">
+                    <div id="news-local" class="news-feed flex flex-col gap-6">
                         <div class="news-placeholder flex-grow flex items-center justify-center border border-dashed border-[#F3F3E1]/30 p-8">
                             <div class="text-center opacity-50">
                                 <p class="text-sm font-bold uppercase tracking-widest mb-2">Ready for local news</p>
@@ -1740,13 +2037,14 @@
 
             <section class="relative brutalist-border-b solid-bg" vid="47">
                 <div class="relative p-8 md:p-12 flex flex-col accent-panel muster-strip" vid="48">
-                    <div class="text-sm font-light italic uppercase stage-title mb-6 text-[#F3F3E1]/70" vid="49">About EGDA</div>
-
                     <div class="mt-auto mb-auto" vid="50">
-                        <h2 id="about-heading" class="text-2xl font-bold uppercase tracking-tight mb-8" vid="51">EGDA works to strengthen and grow <span class="accent-text">Estonia's game development ecosystem.</span></h2>
-                        <p id="about-body" class="text-base md:text-lg font-light leading-relaxed text-[#F3F3E1]/80 mb-10 max-w-3xl">We connect developers, studios, educators, cultural institutions, and industry partners through events, collaboration, education, and advocacy. We support the next generation of game developers, build connections with partners in Estonia and abroad, and promote games as an important part of contemporary culture and the creative industries. Our goal is to build a strong, connected, and sustainable game development community in Estonia.</p>
+                        <div class="about-copy mx-auto max-w-3xl text-center">
+                            <div class="text-sm font-light italic uppercase stage-title mb-6 text-[#F3F3E1]/70" vid="49">About EGDA</div>
+                            <h2 id="about-heading" class="text-2xl font-bold uppercase tracking-tight mb-8" vid="51">EGDA works to strengthen and grow <span class="accent-text">Estonia's game development ecosystem.</span></h2>
+                            <p id="about-body" class="text-base md:text-lg font-light leading-relaxed text-[#F3F3E1]/80">We connect developers, studios, educators, cultural institutions, and industry partners through events, collaboration, education, and advocacy. We support the next generation of game developers, build connections with partners in Estonia and abroad, and promote games as an important part of contemporary culture and the creative industries. Our goal is to build a strong, connected, and sustainable game development community in Estonia.</p>
+                        </div>
 
-                        <div class="photo-strip -mx-8 md:-mx-12 mb-10">
+                        <div class="photo-strip -mx-8 md:-mx-12 mt-10 mb-10">
                             <div class="photo-strip-track">
                                 <div class="photo-strip-item"><img src="/assets/meetups/meetup-2.jpg" alt="EGDA meetup"></div>
                                 <div class="photo-strip-item"><img src="/assets/meetups/meetup-3.jpg" alt="EGDA meetup"></div>
@@ -1804,7 +2102,6 @@
             <section id="membership" class="relative brutalist-border-b solid-bg flex flex-col" vid="72">
 
                 <div class="relative p-8 md:p-12 lg:p-16 brutalist-border-b membership-intro accent-panel muster-strip" vid="246">
-                    <div class="text-sm font-light italic uppercase stage-title mb-6 text-[#F3F3E1]/70" vid="247">Join EGDA</div>
                     <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12 items-end" vid="248">
                         <h2 class="lg:col-span-3 text-5xl md:text-7xl lg:text-8xl font-black uppercase tracking-tighter leading-[0.88]" vid="249">Want to become a <span class="accent-text">member?</span></h2>
                         <p class="lg:col-span-2 text-xl md:text-2xl font-light uppercase tracking-tight leading-snug" vid="250">Whether you're a developer, studio, student, publisher, educator, hobbyist, or simply passionate about games, you're welcome to become part of the community. Together, we're building a stronger, more connected, and internationally recognised Estonian games industry.</p>
@@ -1876,10 +2173,11 @@
             
             <section class="relative brutalist-border-b solid-bg">
                 <div class="relative p-8 md:p-12 accent-panel muster-strip">
-                    <div class="text-sm font-light italic uppercase stage-title mb-6 text-[#F3F3E1]/70">Connect</div>
-
                     <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12 items-end mb-10">
-                        <h2 class="lg:col-span-3 text-4xl md:text-6xl lg:text-7xl font-black uppercase tracking-tighter leading-[0.9]">Join the <span class="accent-text">Conversation</span></h2>
+                        <div class="lg:col-span-3">
+                            <div class="text-sm font-light italic uppercase stage-title mb-6 text-[#F3F3E1]/70">Connect with us and</div>
+                            <h2 class="text-4xl md:text-6xl lg:text-7xl font-black uppercase tracking-tighter leading-[0.9]">Join the <span class="accent-text">conversation</span></h2>
+                        </div>
                         <p class="lg:col-span-2 text-lg md:text-xl font-light uppercase tracking-tight leading-snug text-[#F3F3E1]/80">Connect with developers, discover opportunities, and stay informed about what's happening in Estonia's games industry.</p>
                     </div>
 
@@ -1899,8 +2197,8 @@
 
             <section class="relative brutalist-border-b solid-bg" vid="200">
                 <div class="relative p-8 md:p-12 brutalist-border-b accent-panel muster-strip" vid="202">
-                    <div class="text-sm font-light italic uppercase stage-title mb-6 text-[#F3F3E1]/70" vid="203">Current Board Members</div>
-                    <h2 class="text-4xl md:text-6xl lg:text-7xl font-black uppercase tracking-tighter leading-[0.9] max-w-5xl" vid="204">People <span class="accent-text">behind EGDA</span>.</h2>
+                    <h2 class="text-4xl md:text-6xl lg:text-7xl font-black uppercase tracking-tighter leading-[0.9] max-w-5xl" vid="204">Current <span class="accent-text">board members</span></h2>
+                    <div class="mt-6 text-sm font-light italic uppercase stage-title text-[#F3F3E1]/70">The people keeping EGDA going</div>
                 </div>
 
                 <div class="board-grid" vid="205">
@@ -1984,9 +2282,13 @@
                             </svg>
                         </div>
                         <div class="text-xs md:text-sm font-medium uppercase leading-relaxed text-[#F3F3E1]/80 space-y-1" vid="138">
-                            <p vid="139">Estonian Game Developers Association</p>
-                            <p>Eesti Mänguarendajate Liit MTÜ</p>
-                            <p>Reg. 80659500</p>
+                            <p id="footer-org-name" vid="139">Estonian Game Developers Association</p>
+                            <p id="footer-org-name-et">Eesti Mänguarendajate Liit MTÜ</p>
+                            <p id="footer-registry">Reg. 80659500</p>
+                            <address class="footer-address pt-4 not-italic normal-case leading-relaxed">
+                                <p id="footer-address-line">Pärnu maakond, Häädemeeste vald, Treimani küla, Kähriku-18, 86003</p>
+                                <p><a href="mailto:info.egda@gmail.com" class="footer-link underline underline-offset-4 decoration-2">info.egda@gmail.com</a></p>
+                            </address>
                             <p class="pt-4 opacity-50 normal-case">Built by <a href="https://martinorav.com" target="_blank" rel="noopener" class="underline">Martin Orav</a></p>
                             <p class="opacity-50 normal-case">Icons by <a href="https://icons8.com" target="_blank" rel="noopener" class="underline">Icons8</a></p>
                         </div>
@@ -2223,8 +2525,27 @@
         });
 
         document.getElementById('logo-btn').addEventListener('click', function() {
-            document.querySelector('header').scrollIntoView({ behavior: 'smooth' });
+            document.body.scrollTop = 0;
         });
+
+        (function () {
+            var header = document.querySelector('.site-header');
+            if (!header) return;
+            var compact = false;
+            function onScroll() {
+                var y = document.body.scrollTop || 0;
+                var shouldCompact = y > 40;
+                if (shouldCompact === compact) return;
+                var before = header.offsetHeight;
+                compact = shouldCompact;
+                header.classList.toggle('is-compact', compact);
+                var after = header.offsetHeight;
+                if (compact) {
+                    document.body.scrollTop = Math.max(0, y - (before - after));
+                }
+            }
+            document.body.addEventListener('scroll', onScroll, { passive: true });
+        })();
     </script>
 
     <script>
@@ -2237,14 +2558,107 @@
 
             function renderItem(item) {
                 var link = item.link
-                    ? '<a href="' + item.link + '" target="_blank" rel="noopener" class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[var(--blue)] hover:underline mt-3">' + (item.link_label || 'Read more') + ' →</a>'
+                    ? '<a href="' + esc(item.link) + '" target="_blank" rel="noopener" class="news-link">' + esc(item.link_label || 'Read more') + ' →</a>'
                     : '';
-                return '<article class="border-t border-[#F3F3E1]/20 pt-5 first:border-t-0 first:pt-0">'
-                    + '<p class="text-xs font-light uppercase tracking-widest text-[#F3F3E1]/50 mb-2">' + formatDate(item.date) + '</p>'
-                    + '<h3 class="text-base font-bold uppercase tracking-tight leading-tight mb-2">' + item.title + '</h3>'
-                    + (item.body ? '<p class="text-sm font-light leading-relaxed text-[#F3F3E1]/70">' + item.body + '</p>' : '')
+                var excerpt = item.body
+                    ? '<p class="news-excerpt">' + esc(String(item.body).replace(/\s+/g, ' ').trim()) + '</p>'
+                    : '';
+                var image = item.image
+                    ? '<img class="news-thumb" src="' + esc(item.image) + '" alt="">'
+                    : '';
+                return '<article class="news-item">'
+                    + '<div class="news-item-row">'
+                    + '<div class="news-item-copy">'
+                    + '<div class="news-item-meta"><span>LinkedIn</span><time datetime="' + esc(item.date || '') + '">' + formatDate(item.date) + '</time></div>'
+                    + '<h3><button type="button" class="news-title">' + esc(item.title) + '</button></h3>'
+                    + excerpt
+                    + link
+                    + '</div>'
+                    + image
+                    + '</div>'
+                    + '</article>';
+            }
+
+            function renderDetail(item) {
+                var link = item.link
+                    ? '<a href="' + esc(item.link) + '" target="_blank" rel="noopener" class="news-link">' + esc(item.link_label || 'Read more') + ' →</a>'
+                    : '';
+                var body = item.body
+                    ? '<p class="news-detail-body">' + esc(item.body).replace(/\n/g, '<br>') + '</p>'
+                    : '';
+                var image = item.image
+                    ? '<img class="news-detail-image" src="' + esc(item.image) + '" alt="">'
+                    : '';
+                return '<article class="news-detail">'
+                    + '<button type="button" class="news-back" aria-label="Back to updates">'
+                    + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="square" stroke-linejoin="miter" d="M19 12H5M11 18l-6-6 6-6"></path></svg>'
+                    + 'Back</button>'
+                    + '<div class="news-item-meta"><span>LinkedIn</span><time datetime="' + esc(item.date || '') + '">' + formatDate(item.date) + '</time></div>'
+                    + '<h3>' + esc(item.title) + '</h3>'
+                    + image
+                    + body
                     + link
                     + '</article>';
+            }
+
+            function mountFeed(el, list) {
+                var savedScroll = 0;
+                var animating = false;
+
+                function reduced() {
+                    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+                }
+
+                function replace(html, scrollTop, bind) {
+                    if (animating) return;
+                    function commit(entering) {
+                        el.innerHTML = '<div class="news-stage' + (entering ? ' is-entering' : '') + '">' + html + '</div>';
+                        el.scrollTop = scrollTop;
+                        bind();
+                        animating = false;
+                    }
+                    var stage = el.querySelector('.news-stage');
+                    if (!stage || reduced()) {
+                        animating = true;
+                        commit(false);
+                        return;
+                    }
+                    animating = true;
+                    stage.classList.add('is-leaving');
+                    var finished = false;
+                    function next() {
+                        if (finished) return;
+                        finished = true;
+                        commit(true);
+                    }
+                    stage.addEventListener('animationend', next);
+                    window.setTimeout(next, 240);
+                }
+
+                function bindList() {
+                    el.querySelectorAll('.news-title').forEach(function (btn, index) {
+                        btn.addEventListener('click', function () {
+                            showDetail(index);
+                        });
+                    });
+                }
+
+                function showList() {
+                    replace(list.map(renderItem).join(''), savedScroll, bindList);
+                }
+
+                function showDetail(index) {
+                    if (animating) return;
+                    savedScroll = el.scrollTop;
+                    replace(renderDetail(list[index]), 0, function () {
+                        var back = el.querySelector('.news-back');
+                        back.addEventListener('click', showList);
+                        back.focus();
+                    });
+                }
+
+                el.innerHTML = '<div class="news-stage">' + list.map(renderItem).join('') + '</div>';
+                bindList();
             }
 
             function esc(str) {
@@ -2273,7 +2687,8 @@
                         var el = document.getElementById('news-' + cat);
                         var list = cat === 'egda' ? egda : local;
                         if (!el || list.length === 0) return;
-                        el.innerHTML = list.map(renderItem).join('');
+                        el.innerHTML = '';
+                        mountFeed(el, list);
                     });
                 })
                 .catch(function () { /* silently fail — placeholders remain */ });
@@ -2336,15 +2751,32 @@
 
             loadContent('/content/contact.json')
                 .then(function (data) {
+                    if (data.org_name) {
+                        var orgName = document.getElementById('footer-org-name');
+                        if (orgName) orgName.textContent = data.org_name;
+                    }
+                    if (data.org_name_et) {
+                        var orgNameEt = document.getElementById('footer-org-name-et');
+                        if (orgNameEt) orgNameEt.textContent = data.org_name_et;
+                    }
+                    if (data.registry_code) {
+                        var registry = document.getElementById('footer-registry');
+                        if (registry) registry.textContent = 'Reg. ' + data.registry_code;
+                    }
+                    if (data.address) {
+                        var addressLine = document.getElementById('footer-address-line');
+                        if (addressLine) addressLine.textContent = data.address;
+                    }
                     if (data.email) {
                         document.querySelectorAll('a[href^="mailto:"]').forEach(function (a) {
                             a.href = 'mailto:' + data.email;
                         });
-                        var footerMail = document.querySelector('footer a[href^="mailto:"]');
-                        if (footerMail) footerMail.textContent = data.email;
+                        document.querySelectorAll('footer a[href^="mailto:"]').forEach(function (a) {
+                            a.textContent = data.email;
+                        });
                     }
                     if (data.discord_url) {
-                        document.querySelectorAll('a[href*="discord.gg"]').forEach(function (a) {
+                        document.querySelectorAll('a[href*="discord.gg"], a[href*="discord.com/invite"]').forEach(function (a) {
                             a.href = data.discord_url;
                         });
                     }

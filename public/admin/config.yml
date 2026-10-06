@@ -61,12 +61,16 @@ collections:
                 public_folder: /assets/boardmembers
                 hint: "If no photo is set, the member's initials are shown instead."
       - name: contact
-        label: Contact & Links
+        label: Footer
         file: public/content/contact.json
         fields:
-          - { label: "Contact Email", name: email, widget: string }
-          - { label: "Discord Invite URL", name: discord_url, widget: string }
-          - { label: "LinkedIn Page URL", name: linkedin_url, widget: string }
+          - { label: "Organization name", name: org_name, widget: string }
+          - { label: "Organization name (Estonian)", name: org_name_et, widget: string }
+          - { label: "Registry code", name: registry_code, widget: string, hint: "Numbers only. The site adds “Reg.” in front." }
+          - { label: "Postal address", name: address, widget: text, hint: "Shown at the bottom of the site. Google for Nonprofits reads this." }
+          - { label: "Contact email", name: email, widget: string, hint: "Shown twice in the footer: next to the address, and as the large link." }
+          - { label: "Discord invite URL", name: discord_url, widget: string }
+          - { label: "LinkedIn page URL", name: linkedin_url, widget: string }
   - name: news
     label: News
     files:

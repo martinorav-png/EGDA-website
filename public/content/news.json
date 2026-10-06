@@ -1,3 +1,54 @@
 {
-  "items": []
+  "items": [
+    {
+      "title": "The nearly complete programme for the MängudeÖÖ Conference is now live!",
+      "category": "egda",
+      "date": "2026-09-21T12:37:12Z",
+      "body": "Mängude öö team will continue adding more details about the talks. The full workshop schedule and registration will be announced next week.\n\nThis is shaping up to be a must attend gathering for game developers from Estonia and neighbouring countries! The conference ticket also gives you access to the MängudeÖÖ game party!\n\nSee you at the MängudeÖÖ Conference on October 16 and let’s celebrate video games together at MängudeÖÖ on October 17!\nhttps://lnkd.in/dZtEahAk",
+      "link": "https://www.linkedin.com/feed/update/urn:li:activity:7507779969310347267",
+      "link_label": "Read on LinkedIn",
+      "image": "/assets/news/mangudeoo.jpg"
+    },
+    {
+      "title": "TipiLAN 2026 is happening on the 11-13 September",
+      "category": "egda",
+      "date": "2026-08-11T09:00:11Z",
+      "body": "Compete on CS2 and LoL tournaments.\nPlay games, relax and enjoy the atmosphere.\nExplore the GameDev Expo area.\n\nCheck out the website: https://tipilan.ee/en",
+      "link": "https://www.linkedin.com/feed/update/urn:li:activity:7492867452121300992",
+      "link_label": "Read on LinkedIn"
+    },
+    {
+      "title": "Gamescom is fast approaching",
+      "category": "egda",
+      "date": "2026-08-06T09:00:02Z",
+      "body": "And EGDA has a representative going. Feel free to approach our board member Jevgeni Orehhov to chat or just to say hi!\n\nThe gamescom 2026 will take place from 26-30 August 2026 in Cologne and we couldn't be more excited to attend.",
+      "link": "https://www.linkedin.com/feed/update/urn:li:activity:7491055477091516416",
+      "link_label": "Read on LinkedIn"
+    },
+    {
+      "title": "Happy end of the week everyone!",
+      "category": "egda",
+      "date": "2026-07-31T06:47:37Z",
+      "body": "We've been asked to share a survey to companies operating in the gaming industry in Estonia. It is an export survey regarding companies working in the creative field.\n\nPlease fill out the survey here: https://lnkd.in/dYBHdqEY\n\nEIS is accepting replies until the 10th of August.",
+      "link": "https://www.linkedin.com/feed/update/urn:li:activity:7488847823841492992",
+      "link_label": "Read on LinkedIn"
+    },
+    {
+      "title": "Our new website is ready",
+      "category": "egda",
+      "date": "2026-07-24T14:21:02Z",
+      "body": "Hello and happy midweek!\n\nWe've been busy behind the scenes for a while now, but we have something to share.\n\nOur new website is ready! Have a look yourself.\nhttps://www.egda.ee/\nmade by Martin Orav\n\nFeedback is greatly appreciated.",
+      "link": "https://www.linkedin.com/feed/update/urn:li:activity:7486425214306770944",
+      "link_label": "Read on LinkedIn"
+    },
+    {
+      "title": "TipiLAN GameDev Expo is coming back in 2026!",
+      "category": "egda",
+      "date": "2026-07-24T09:00:01Z",
+      "body": "Last year, the TipiLAN expo area was legendary, with 35 local games, amazing educational partners, and the first-ever EGG Awards celebrating unreleased Estonian indie games.\n\nNow we’re calling Estonian game devs again!\n\nIf you're working on a game, whether it’s a polished product, a playable demo, a student project, or still a work-in-progress, we’d love to showcase it at TipiLAN 2026.\n\nThe expo takes place on 11–12 September at TalTech. Submit your game here (deadline 2 August): https://lnkd.in/ehBpn9hx\n\nJoin the server here: https://lnkd.in/ez4nhQjr\n\nLet’s make TipiLAN 2026 another amazing showcase of Estonian game development!",
+      "link": "https://www.linkedin.com/feed/update/urn:li:activity:7486344427645415426",
+      "link_label": "Read on LinkedIn",
+      "image": "/assets/news/tipilan-call.jpg"
+    }
+  ]
 }

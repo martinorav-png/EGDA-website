@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import DecryptedText from './DecryptedText.jsx';
 
-const DEFAULT_LINES = ["Estonia's game scene,", 'on one page.'];
+const DEFAULT_LINES = ['the homepage for', "estonia's game scene"];
 
 export default function HeroTitle() {
   const containerRef = useRef(null);

@@ -1,0 +1,36 @@
+name: Update LinkedIn news
+
+on:
+  schedule:
+    # 05:00 UTC, morning in Estonia. Vercel deploys the commit.
+    - cron: "0 5 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: linkedin-news
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Pull new LinkedIn posts
+        run: python3 scripts/update_linkedin_news.py
+
+      - name: Commit and push
+        run: |
+          git add public/content/news.json public/assets/news
+          if git diff --staged --quiet; then
+            echo "No new posts."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Update EGDA LinkedIn posts."
+          git push

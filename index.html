@@ -1212,6 +1212,41 @@
             -webkit-line-clamp: 2;
         }
 
+        .news-inline-link {
+            color: inherit;
+            text-decoration: underline;
+            text-underline-offset: 0.15em;
+            text-decoration-thickness: 1px;
+        }
+
+        .news-inline-link:hover,
+        .news-inline-link:focus-visible {
+            color: #fff;
+        }
+
+        .news-expand {
+            display: inline-flex;
+            margin-top: 0.4rem;
+            padding: 0;
+            border: 0;
+            background: none;
+            color: rgba(243, 243, 225, 0.72);
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        .news-expand:hover,
+        .news-expand:focus-visible {
+            color: #fff;
+        }
+
+        .news-expand[hidden] {
+            display: none;
+        }
+
         .news-thumb {
             display: block;
             width: 8.75rem;
@@ -2561,7 +2596,8 @@
                     ? '<a href="' + esc(item.link) + '" target="_blank" rel="noopener" class="news-link">' + esc(item.link_label || 'Read more') + ' →</a>'
                     : '';
                 var excerpt = item.body
-                    ? '<p class="news-excerpt">' + esc(String(item.body).replace(/\s+/g, ' ').trim()) + '</p>'
+                    ? '<p class="news-excerpt">' + linkify(esc(String(item.body).replace(/\s+/g, ' ').trim())) + '</p>'
+                        + '<button type="button" class="news-expand" hidden>Expand</button>'
                     : '';
                 var image = item.image
                     ? '<img class="news-thumb" src="' + esc(item.image) + '" alt="">'
@@ -2584,7 +2620,7 @@
                     ? '<a href="' + esc(item.link) + '" target="_blank" rel="noopener" class="news-link">' + esc(item.link_label || 'Read more') + ' →</a>'
                     : '';
                 var body = item.body
-                    ? '<p class="news-detail-body">' + esc(item.body).replace(/\n/g, '<br>') + '</p>'
+                    ? '<p class="news-detail-body">' + linkify(esc(item.body)).replace(/\n/g, '<br>') + '</p>'
                     : '';
                 var image = item.image
                     ? '<img class="news-detail-image" src="' + esc(item.image) + '" alt="">'
@@ -2635,11 +2671,37 @@
                     window.setTimeout(next, 240);
                 }
 
+                function syncExpand() {
+                    el.querySelectorAll('.news-item').forEach(function (item) {
+                        var excerpt = item.querySelector('.news-excerpt');
+                        var btn = item.querySelector('.news-expand');
+                        if (!excerpt || !btn) return;
+                        btn.hidden = excerpt.scrollHeight <= excerpt.clientHeight + 1;
+                    });
+                }
+
                 function bindList() {
-                    el.querySelectorAll('.news-title').forEach(function (btn, index) {
-                        btn.addEventListener('click', function () {
-                            showDetail(index);
-                        });
+                    el.querySelectorAll('.news-item').forEach(function (item, index) {
+                        var title = item.querySelector('.news-title');
+                        var expand = item.querySelector('.news-expand');
+                        if (title) {
+                            title.addEventListener('click', function () {
+                                showDetail(index);
+                            });
+                        }
+                        if (expand) {
+                            expand.addEventListener('click', function () {
+                                showDetail(index);
+                            });
+                        }
+                    });
+                    window.requestAnimationFrame(syncExpand);
+                }
+
+                if (!el.dataset.expandBound) {
+                    el.dataset.expandBound = 'true';
+                    window.addEventListener('resize', function () {
+                        if (el.querySelector('.news-excerpt')) syncExpand();
                     });
                 }
 
@@ -2665,6 +2727,35 @@
                 return String(str == null ? '' : str)
                     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
                     .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+            }
+
+            function trimEdgePunctuation(value) {
+                var trailing = '';
+                var core = value;
+                while (core && /[),.;:!?]$/.test(core)) {
+                    var last = core.charAt(core.length - 1);
+                    if (last === ')' && core.split('(').length > core.split(')').length) break;
+                    trailing = last + trailing;
+                    core = core.slice(0, -1);
+                }
+                return { core: core, trailing: trailing };
+            }
+
+            function linkify(escaped) {
+                return String(escaped).replace(
+                    /([A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,})|(https?:\/\/[^\s<]+|www\.[^\s<]+)/gi,
+                    function (match, email) {
+                        var parts = trimEdgePunctuation(match);
+                        if (!parts.core) return match;
+                        if (email) {
+                            return '<a href="mailto:' + parts.core + '" class="news-inline-link">' + parts.core + '</a>' + parts.trailing;
+                        }
+                        var href = parts.core;
+                        if (/^www\./i.test(href)) href = 'https://' + href;
+                        if (!/^https?:\/\//i.test(href)) return match;
+                        return '<a href="' + href + '" target="_blank" rel="noopener" class="news-inline-link">' + parts.core + '</a>' + parts.trailing;
+                    }
+                );
             }
 
             function loadContent(path) {
@@ -2768,7 +2859,7 @@
                         if (addressLine) addressLine.textContent = data.address;
                     }
                     if (data.email) {
-                        document.querySelectorAll('a[href^="mailto:"]').forEach(function (a) {
+                        document.querySelectorAll('a[href^="mailto:"]:not(.news-inline-link)').forEach(function (a) {
                             a.href = 'mailto:' + data.email;
                         });
                         document.querySelectorAll('footer a[href^="mailto:"]').forEach(function (a) {
